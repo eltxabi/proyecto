@@ -29,9 +29,9 @@ class NewVisitorTest(unittest.TestCase):
       #Click in registration link
       register_links[0].click() 
 
-      #We can see a registration form 
-      reg_form=self.browser.find_element_by_name('Registration_Form')
-      self.assertNotEquals(reg_form,None)
+      #We are in registration page 
+      self.browser
+
 
 
 	     

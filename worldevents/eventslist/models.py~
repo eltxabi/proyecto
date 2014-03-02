@@ -1,0 +1,9 @@
+from mongoengine import *
+from django.conf import settings
+
+connect('testsuite')
+
+class Entrada(Document):
+   title = StringField(max_length = 64)
+      
+   meta = {'collection':'test_entrada'}
