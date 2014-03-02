@@ -25,7 +25,7 @@ class HomePageTest(TestCase):
 
 
 
-'''
+
 class NoSQLTestCase(TestCase):
     def _fixture_setup(self):
         pass
@@ -39,7 +39,7 @@ class NoSQLTestCase(TestCase):
 	   self.assertEqual(e.title,'probandolo')
 	
         self.assertEqual(1 + 1, 3)
-'''
+
 
 
 

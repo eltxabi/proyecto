@@ -69,6 +69,7 @@ mongoengine.connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST)
 
 #Test
 TEST_RUNNER = 'worldevents.tests.NoSQLTestRunner'
+_MONGODB_TEST_NAME = 'db_test'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

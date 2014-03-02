@@ -34,7 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = (
 #    'django.contrib.admin',
 #    'django.contrib.auth',
-    'django.contrib.contenttypes',
+#    'django.contrib.contenttypes',
 #    'django.contrib.sessions',
 #    'django.contrib.messages',
 #    'django.contrib.staticfiles',
@@ -69,6 +69,8 @@ mongoengine.connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST)
 
 #Test
 TEST_RUNNER = 'worldevents.tests.NoSQLTestRunner'
+TEST_MODE = False
+_MONGODB_TEST_NAME = 'db_test'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
