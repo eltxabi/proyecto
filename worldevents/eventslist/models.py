@@ -1,6 +1,7 @@
 from mongoengine import *
 from django.conf import settings
 
+#for select test database
 if settings.TEST_MODE:
    connect(getattr(settings,"_MONGODB_TEST_NAME",None))
 else:

@@ -12,7 +12,7 @@ class NoSQLTestRunner(DjangoTestSuiteRunner):
 #---------------------------------
  
     def setup_databases(self):
-        db_name = getattr(settings,"_MONGODB_TEST_NAME",None)
+        db_name = 'testsuite'
 	connect(db_name)
 	print 'Creating test-database: ' + db_name
 	return db_name	

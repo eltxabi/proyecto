@@ -8,7 +8,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
-import mongoengine
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -39,6 +38,7 @@ INSTALLED_APPS = (
 #    'django.contrib.messages',
 #    'django.contrib.staticfiles',
      'eventslist',
+         
 )
 
 MIDDLEWARE_CLASSES = (
@@ -54,22 +54,14 @@ ROOT_URLCONF = 'worldevents.urls'
 
 WSGI_APPLICATION = 'worldevents.wsgi.application'
 
-#MongoDatabase
-
-_MONGODB_USER = ''
-_MONGODB_PASSWD = ''
-_MONGODB_HOST = 'localhost'
-_MONGODB_NAME = 'worldevents'
-_MONGODB_DATABASE_HOST = \
-    'mongodb://%s/%s' \
-    % (_MONGODB_HOST, _MONGODB_NAME)
-
-mongoengine.connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST)
-
-
 #Test
 TEST_RUNNER = 'worldevents.tests.NoSQLTestRunner'
 _MONGODB_TEST_NAME = 'db_test'
+TEST_MODE = False
+
+AUTHENTICATION_BACKENDS = (
+    'mongoengine.django.auth.MongoEngineBackend',
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -93,8 +85,17 @@ STATIC_URL = '/static/'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3'
-    }
-}
+#MongoDatabase
+
+_MONGODB_USER = ''
+_MONGODB_PASSWD = ''
+_MONGODB_HOST = 'localhost'
+_MONGODB_NAME = 'worldevents'
+_MONGODB_DATABASE_HOST = \
+    'mongodb://%s/%s' \
+    % (_MONGODB_HOST, _MONGODB_NAME)
+
+from mongoengine import connect
+connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST)
+
+SESSION_ENGINE = 'mongoengine.django.sessions'

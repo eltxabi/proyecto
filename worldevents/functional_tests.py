@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import unittest
 
 class NewVisitorTest(unittest.TestCase):  
@@ -29,14 +30,24 @@ class NewVisitorTest(unittest.TestCase):
       #Click in registration link
       register_links[0].click() 
 
-      #We can see a registration form 
-      reg_form=self.browser.find_element_by_name('Registration_Form')
-      self.assertNotEquals(reg_form,None)
+      #I can see a registration form 
+      username_input=self.browser.find_element_by_name('username')
+      self.assertNotEquals(username_input,None)
+      password1_input=self.browser.find_element_by_name('password1')
+      self.assertNotEquals(password1_input,None)
+      password2_input=self.browser.find_element_by_name('password2')
+      self.assertNotEquals(password2_input,None)
+	
+      #I enter this data: username->john,password->john
+      username_input.send_keys('john')
+      password1_input.send_keys('john') 
+      password2_input.send_keys('john') 
+      password2_input.send_keys(Keys.ENTER)  
 
 
-	     
+
 
 if __name__ == '__main__':  
-   unittest.main()  
+    unittest.main()       
 
 
