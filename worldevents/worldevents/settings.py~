@@ -32,11 +32,11 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
 #    'django.contrib.admin',
-#    'django.contrib.auth',
-#    'django.contrib.contenttypes',
-#    'django.contrib.sessions',
-#    'django.contrib.messages',
-#    'django.contrib.staticfiles',
+     'django.contrib.auth',
+     'django.contrib.contenttypes',
+     'django.contrib.sessions',
+     'django.contrib.messages',
+     'django.contrib.staticfiles',
      'eventslist',
          
 )
@@ -85,6 +85,15 @@ STATIC_URL = '/static/'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
+DATABASES = {
+    'default': {
+	'ENGINE': 'django.db.backends.sqlite3',
+	'NAME': 'prueba'	
+    }
+}
+
+
+
 #MongoDatabase
 
 _MONGODB_USER = ''
@@ -96,6 +105,6 @@ _MONGODB_DATABASE_HOST = \
     % (_MONGODB_HOST, _MONGODB_NAME)
 
 from mongoengine import connect
-mongoengine.connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST)
+connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST)
 
 SESSION_ENGINE = 'mongoengine.django.sessions'

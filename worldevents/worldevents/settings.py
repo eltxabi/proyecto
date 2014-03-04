@@ -32,11 +32,11 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
 #    'django.contrib.admin',
-#    'django.contrib.auth',
-#    'django.contrib.contenttypes',
-#    'django.contrib.sessions',
-#    'django.contrib.messages',
-#    'django.contrib.staticfiles',
+     'django.contrib.auth',
+     'django.contrib.contenttypes',
+     'django.contrib.sessions',
+     'django.contrib.messages',
+     'django.contrib.staticfiles',
      'eventslist',
          
 )
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'worldevents.urls'
 WSGI_APPLICATION = 'worldevents.wsgi.application'
 
 #Test
-TEST_RUNNER = 'worldevents.tests.NoSQLTestRunner'
+TEST_RUNNER = 'worldevents.tests.MongoTestSuiteRunner'
 _MONGODB_TEST_NAME = 'db_test'
 TEST_MODE = False
 
@@ -84,6 +84,15 @@ STATIC_URL = '/static/'
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+	'ENGINE': 'django.db.backends.sqlite3',
+	'NAME': 'prueba'	
+    }
+}
+
+
 
 #MongoDatabase
 

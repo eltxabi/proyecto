@@ -1,14 +1,15 @@
 {% extends "eventslist/base.html" %}
 
 {% block content %}
-	<div id='messages'>
+<div id='messages'>
 	{% if messages %}
-	    <ol>
-	    {% for message in messages %}
-		<li><strong>{{ message|escape }}</strong></li>
-	    {% endfor %}
-	    </ol>
-	{% endif %}
+		<ul class="messages">
+    		{% for message in messages %}
+    			<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    		{% endfor %}
+		</ul>
+	{% endif %}	
+
 	</div>
 	<div><a href="eventslist/register">Registro</a></div>
 {% endblock %}

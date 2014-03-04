@@ -3,6 +3,7 @@ from eventslist.forms import RegistrationForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from mongoengine.django.auth import User
+from django.contrib import messages
 
 def home(request):
    return render(request,'eventslist/home.html')
@@ -13,6 +14,7 @@ def register(request):
         if form.is_valid():
 	    new_user = User(form.cleaned_data['username'],form.cleaned_data['password1'])
 	    new_user.save()
+	    messages.success(request, 'You have been successfully registered')
             return HttpResponseRedirect("/")
     else:
         form = RegistrationForm()
