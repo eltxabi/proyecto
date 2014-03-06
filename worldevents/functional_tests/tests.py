@@ -1,7 +1,9 @@
+form django.test import LiveServerTestCase
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import unittest
 
-class NewVisitorTest(unittest.TestCase):  
+class NewVisitorTest(LiveServerTestCase):  
 
    def setUp(self):  
       self.browser = webdriver.Firefox()
@@ -29,14 +31,26 @@ class NewVisitorTest(unittest.TestCase):
       #Click in registration link
       register_links[0].click() 
 
-      #We can see a registration form 
-      reg_form=self.browser.find_element_by_name('Registration_Form')
-      self.assertNotEquals(reg_form,None)
+      #I can see a registration form 
+      username_input=self.browser.find_element_by_name('username')
+      self.assertNotEquals(username_input,None)
+      password1_input=self.browser.find_element_by_name('password1')
+      self.assertNotEquals(password1_input,None)
+      password2_input=self.browser.find_element_by_name('password2')
+      self.assertNotEquals(password2_input,None)
+	
+      #I enter this data: username->john,password->john
+      username_input.send_keys('john')
+      password1_input.send_keys('john') 
+      password2_input.send_keys('john') 
+      password2_input.send_keys(Keys.ENTER)  
+
+      #I can see home page with success message
+      messages=self.browser.find_element_by_id('messages')
+      self.assertIn(messages.text,"You have been successfully registered")	 	
 
 
-	     
 
 if __name__ == '__main__':  
-   unittest.main()  
-
+    unittest.main()       
 

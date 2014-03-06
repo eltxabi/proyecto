@@ -55,7 +55,7 @@ ROOT_URLCONF = 'worldevents.urls'
 WSGI_APPLICATION = 'worldevents.wsgi.application'
 
 #Test
-TEST_RUNNER = 'worldevents.tests.NoSQLTestRunner'
+TEST_RUNNER = 'worldevents.tests.MongoTestSuiteRunner'
 _MONGODB_TEST_NAME = 'db_test'
 TEST_MODE = False
 
@@ -87,8 +87,7 @@ STATIC_URL = '/static/'
 
 DATABASES = {
     'default': {
-	'ENGINE': 'django.db.backends.sqlite3',
-	'NAME': 'prueba'	
+	'ENGINE': ''	
     }
 }
 

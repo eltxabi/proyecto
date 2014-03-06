@@ -1,17 +1,18 @@
 {% extends "eventslist/base.html" %}
-
 {% block content %}
-<div id='messages'>
-	{% if messages %}
-		<ul class="messages">
-    		{% for message in messages %}
-    			<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    		{% endfor %}
-		</ul>
-	{% endif %}	
-
+<div>
+		
+	{% if user.is_authenticated %}	
+			{{user.username}}
+			<a href="{% url 'eventslist.views.logoutpage' %}">Logout</a>
+		
+	{% else %}
+		<a href="{% url 'eventslist.views.register' %}">Registro</a>
+		<a href="{% url 'eventslist.views.loginpage' %}">Login</a>
+	{% endif %}
 	</div>
-	<div><a href="eventslist/register">Registro</a></div>
+
+
 {% endblock %}
 
 

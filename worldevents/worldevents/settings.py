@@ -38,7 +38,7 @@ INSTALLED_APPS = (
      'django.contrib.messages',
      'django.contrib.staticfiles',
      'eventslist',
-         
+     'ft',    
 )
 
 MIDDLEWARE_CLASSES = (
@@ -87,8 +87,7 @@ STATIC_URL = '/static/'
 
 DATABASES = {
     'default': {
-	'ENGINE': 'django.db.backends.sqlite3',
-	'NAME': 'prueba'	
+	'ENGINE': ''	
     }
 }
 
