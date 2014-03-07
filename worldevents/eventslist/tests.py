@@ -1,14 +1,14 @@
 from django.test import LiveServerTestCase
 from django.core.urlresolvers import resolve
-from eventslist.views import home,register,loginpage
+from eventslist.views import home,register,loginpage,addevent
+from eventslist.models import Event,Category
 from django.http import HttpRequest
 from django.template.loader import render_to_string
-from eventslist.forms import RegistrationForm
+from eventslist.forms import RegistrationForm,EventForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.html import escape
 from mongoengine.django.auth import User
 
-from eventslist.models import Entrada
 
 class HomeTest(LiveServerTestCase):
     def _fixture_setup(self):
@@ -56,13 +56,6 @@ class RegisterTest(LiveServerTestCase):
     def test_register_page_save_user_to_database(self):
 	response = self.client.post('/eventslist/register',data={'username': 'john','password1': 'john','password2': 'john'}) 
 	self.assertEqual(User.objects(username='john').count(),1) 
-
-'''problem because User object use primary database
-    def test_register_page_send_success_message_to_home(self):
-	response = self.client.post('/eventslist/register',data={'username': 'mmmm','password1': 'john','password2': 'john'},follow=True) 
-	expected_html='You have been successfully registered'
-        self.assertIn(expected_html,response.content)
-'''
 	
 class RegistrationFormTest(LiveServerTestCase):
     def _fixture_setup(self):
@@ -136,9 +129,14 @@ class LoginTest(LiveServerTestCase):
 
 class AddEventTest(LiveServerTestCase):
     def _fixture_setup(self):
-        pass
+        c=Category(name='Musica')
+        c.save()
+	c=Category(name='Restauracion')
+        c.save()
+
     def _fixture_teardown(self):
-        pass
+        Category.objects.all().delete()
+        Event.objects.all().delete()
 
     def test_addevent_link_resolves_addevent_view(self):
 	page=resolve('/eventslist/addevent')
@@ -147,18 +145,19 @@ class AddEventTest(LiveServerTestCase):
     def test_addevent_page_returns_correct_html(self):
         request = HttpRequest() 
         response = addevent(request)  
-        expected_html = render_to_string('eventslist/register.html',{
-        'form': AddEventForm()})
+        expected_html = render_to_string('eventslist/addevent.html',{
+        'form': EventForm()})
         self.assertEqual(response.content.decode(), expected_html)
 
     def test_addevent_page_uses_addevent_form(self):
         response = self.client.get('/eventslist/addevent')
-        self.assertIsInstance(response.context['form'], AddEventForm)
+        self.assertIsInstance(response.context['form'], EventForm)
 
     def test_addevent_page_save_event_to_database(self):
-	response = self.client.post('/eventslist/addevent',data={'username': 'john','password1': 'john','password2': 'john'}) 
-	self.assertEqual(User.objects(title='john').count(),1) 
+	response = self.client.post('/eventslist/addevent',data={'title': 'Concierto','description': 'Es un concierto','category': 'Musica'}) 
+        self.assertEqual(Event.objects(title='Concierto').count(),1) 
 
+    
 '''problem because User object use primary database
     def test_register_page_send_success_message_to_home(self):
 	response = self.client.post('/eventslist/register',data={'username': 'mmmm','password1': 'john','password2': 'john'},follow=True) 
@@ -166,14 +165,23 @@ class AddEventTest(LiveServerTestCase):
         self.assertIn(expected_html,response.content)
 '''
 	
-class AddEventFormTest(LiveServerTestCase):
+class EventFormTest(LiveServerTestCase):
     def _fixture_setup(self):
-        pass
-    def _fixture_teardown(self):
-        pass
-
+        c=Category(name='Musica')
+        c.save()
+	c=Category(name='Restauracion')
+        c.save()
  
-    def test_validation_errors_are_sent_back_to_register_template(self):
+    def _fixture_teardown(self):
+        Category.objects.all().delete()
+        Event.objects.all().delete()
+        
+    def test_event_form_load_categories_from_db(self):
+        response = self.client.get('/eventslist/addevent')
+        for c in Category.objects().all() :   
+            self.assertIn('<option value="'+c.name+'">'+c.name+'</option>',response.content.decode())        
+
+    def test_validation_errors_are_sent_back_to_addevent_template(self):
         response = self.client.post('/eventslist/addevent')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'eventslist/addevent.html')

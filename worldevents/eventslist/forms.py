@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import authenticate, get_user_model
 from django.utils.text import capfirst
 from mongoengine.django.auth import User
+from eventslist.models import Category
 
 class RegistrationForm(forms.Form):
     error_messages = {
@@ -34,6 +35,20 @@ class RegistrationForm(forms.Form):
 
        return cleaned_data	
 
+
+class EventForm(forms.Form):
+      
+    title = forms.CharField(label="Title", max_length=30)
+    description = forms.CharField(label="Description",widget=forms.Textarea)
+
+    category = forms.ChoiceField(label="Category",widget=forms.Select)
+    
+   
+    def __init__(self, *args, **kwargs):
+        super(EventForm, self).__init__(*args, **kwargs)
+        choices = [(unicode(pt), unicode(pt)) for pt in Category.objects.all()]
+        self.fields['category'].choices = choices       
+      
 '''
 class AuthenticationForm(forms.Form):
     """

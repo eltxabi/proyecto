@@ -1,0 +1,13 @@
+{% extends "eventslist/base.html" %}
+
+{% block content %}
+<div>
+  {% if form %}
+	  <form action="" method="post">
+	      {{ form.as_p }}
+	      {% csrf_token %} 
+	      <input type="submit" value="add">
+	  </form>
+  {% endif %}
+</div>
+{% endblock %}

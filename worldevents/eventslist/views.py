@@ -1,5 +1,6 @@
 
-from eventslist.forms import RegistrationForm
+from eventslist.forms import RegistrationForm,EventForm
+from eventslist.models import Category,Event
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from mongoengine.django.auth import User
@@ -53,3 +54,22 @@ def loginpage(request):
 def logoutpage(request):
    logout(request)
    return HttpResponseRedirect("/")
+
+def addevent(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            title=form.cleaned_data['title']
+	    description=form.cleaned_data['description']
+            category=form.cleaned_data['category'] 
+            event = Event(title=title,description=description,category=category) 
+            event.save() 	
+            messages.success(request, title + ' has been created')
+            return HttpResponseRedirect("/")
+    else:
+        form = EventForm()
+       
+    return render(request,'eventslist/addevent.html', {
+        'form': form,
+    })  
+
