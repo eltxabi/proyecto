@@ -154,7 +154,8 @@ class AddEventTest(LiveServerTestCase):
         self.assertIsInstance(response.context['form'], EventForm)
 
     def test_addevent_page_save_event_to_database(self):
-	response = self.client.post('/eventslist/addevent',data={'title': 'Concierto','description': 'Es un concierto','category': 'Musica'}) 
+	response = self.client.post('/eventslist/addevent',data={'title': 'Concierto','description': 'Es un concierto','category': 'Musica','lat':'49.8','lng':'4.7'}) 
+           
         self.assertEqual(Event.objects(title='Concierto').count(),1) 
 
     

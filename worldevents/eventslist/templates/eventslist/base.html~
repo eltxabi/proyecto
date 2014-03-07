@@ -1,11 +1,16 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>WorldEvents</title>
 	<meta charset="uft-8">
+        {% block stylesheets %}
+	{% endblock %}
+	{% block javascript %}
+	{% endblock %}
     </head>
     <body>
-	{% block content %}
+	
 	<div id='messages'>
 		{% if messages %}
 			<ul class="messages">
@@ -16,8 +21,14 @@
 			</ul>
 		{% endif %}	
 	</div>
-
+	 {% block content %}
 	 {% endblock %}
        
     </body>
 </html>
+{% block scripts %}
+$( document ).ready(function() {
+	console.log( "ready!" );
+	});
+{% endblock %}
+

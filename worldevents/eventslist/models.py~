@@ -1,7 +1,7 @@
 from mongoengine import *
 from django.conf import settings
 
-connect('proyecto')
+connect('worldevents')
 
 class Event(Document):
    title = StringField(max_length = 64)

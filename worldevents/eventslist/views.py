@@ -62,9 +62,13 @@ def addevent(request):
             title=form.cleaned_data['title']
 	    description=form.cleaned_data['description']
             category=form.cleaned_data['category'] 
-            event = Event(title=title,description=description,category=category) 
+	    lat=form.cleaned_data['lat']
+	    lng=form.cleaned_data['lng']		
+            event = Event(title=title,description=description,category=category)
+	    event.location=[float(lat),float(lng)] 
             event.save() 	
             messages.success(request, title + ' has been created')
+            messages.success(request,lat) 
             return HttpResponseRedirect("/")
     else:
         form = EventForm()

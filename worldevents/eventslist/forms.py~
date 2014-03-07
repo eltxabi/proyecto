@@ -42,11 +42,12 @@ class EventForm(forms.Form):
     description = forms.CharField(label="Description",widget=forms.Textarea)
 
     category = forms.ChoiceField(label="Category",widget=forms.Select)
-    
-   
+    lat = forms.ChoiceField(widget=forms.HiddenInput)  
+    lng = forms.ChoiceField(widget=forms.HiddenInput) 
+
     def __init__(self, *args, **kwargs):
         super(EventForm, self).__init__(*args, **kwargs)
-        choices = [(pt.id, unicode(pt)) for pt in Category.objects.all()]
+        choices = [(unicode(pt), unicode(pt)) for pt in Category.objects.all()]
         self.fields['category'].choices = choices       
       
 '''

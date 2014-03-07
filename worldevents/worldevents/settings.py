@@ -81,6 +81,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+
+
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
