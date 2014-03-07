@@ -1,10 +1,11 @@
-from django.test import LiveServerTestCase
+from django.test import LiveServerTestCase,Client
 from django.core.urlresolvers import resolve
 from eventslist.views import home,register,loginpage,addevent
 from eventslist.models import Event,Category
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from eventslist.forms import RegistrationForm,EventForm
+from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.html import escape
 from mongoengine.django.auth import User
@@ -36,7 +37,7 @@ class RegisterTest(LiveServerTestCase):
     def _fixture_setup(self):
         pass
     def _fixture_teardown(self):
-        pass
+        User.objects(username='john').delete() 
 
     def test_register_link_resolves_register_view(self):
 	page=resolve('/eventslist/register')
@@ -61,7 +62,7 @@ class RegistrationFormTest(LiveServerTestCase):
     def _fixture_setup(self):
         pass
     def _fixture_teardown(self):
-        pass
+        User.objects(username='john').delete() 
 
  
     def test_validation_errors_are_sent_back_to_register_template(self):
@@ -102,9 +103,9 @@ class RegistrationFormTest(LiveServerTestCase):
 
 class LoginTest(LiveServerTestCase):
     def _fixture_setup(self):
-        pass
+        user=User.create_user('john','john')
     def _fixture_teardown(self):
-        pass
+        User.objects(username='john').delete()  
 
     def test_login_link_resolves_login_view(self):
 	page=resolve('/eventslist/login')
@@ -123,7 +124,8 @@ class LoginTest(LiveServerTestCase):
 
     def test_login_page_login_user(self):
 	response = self.client.post('/eventslist/login',data={'username': 'john','password': 'john'}) 
-	self.assertIn(response.content.decode(),'john') 
+	self.assertIn(response.content.decode(),'john')
+	
 
   
 
@@ -133,31 +135,52 @@ class AddEventTest(LiveServerTestCase):
         c.save()
 	c=Category(name='Restauracion')
         c.save()
-
+        user=User.create_user('john','john')
+	request = HttpRequest() 
+	user=User.objects(username='john')
+	self.client.login(username='john',password='john')
+         
+        
     def _fixture_teardown(self):
         Category.objects.all().delete()
         Event.objects.all().delete()
-
+	self.client.logout()
+        User.objects(username='john').delete()  
+    
+    def test_addevent_page_requires_login_user(self):
+	self.client.logout()
+	response = self.client.get('/eventslist/addevent',follow=True)
+	self.assertEqual(response.status_code,200)
+	self.assertRedirects(response,'/eventslist/login?next=/eventslist/addevent')
+    
     def test_addevent_link_resolves_addevent_view(self):
 	page=resolve('/eventslist/addevent')
 	self.assertEqual(page.func, addevent)
-
+    '''
     def test_addevent_page_returns_correct_html(self):
         request = HttpRequest() 
-        response = addevent(request)  
+	user=User.objects(username='john')
+        #csrf_client=Client(enforce_csrf_checks=True)
+        self.client.login(username='john',password='john')
+        response = self.client.get('/eventslist/addevent')  
         expected_html = render_to_string('eventslist/addevent.html',{
         'form': EventForm()})
+        self.client.logout() 
+        print "eeeeeeeeeeeeee"+response.content.decode()
+        print "aaaaaaaaaaaaaa"+expected_html
         self.assertEqual(response.content.decode(), expected_html)
+    '''
 
     def test_addevent_page_uses_addevent_form(self):
-        response = self.client.get('/eventslist/addevent')
-        self.assertIsInstance(response.context['form'], EventForm)
+	response = self.client.get('/eventslist/addevent')
+	self.assertIsInstance(response.context['form'], EventForm)
 
     def test_addevent_page_save_event_to_database(self):
+	
 	response = self.client.post('/eventslist/addevent',data={'title': 'Concierto','description': 'Es un concierto','category': 'Musica','lat':'49.8','lng':'4.7'}) 
-           
         self.assertEqual(Event.objects(title='Concierto').count(),1) 
-
+	self.assertEqual(str(Event.objects(title='Concierto')),'[<Event: Concierto-49.84.7-Es un concierto-Musica>]')
+	
     
 '''problem because User object use primary database
     def test_register_page_send_success_message_to_home(self):
@@ -172,10 +195,16 @@ class EventFormTest(LiveServerTestCase):
         c.save()
 	c=Category(name='Restauracion')
         c.save()
+	user=User.create_user('john','john')
+	request = HttpRequest() 
+	user=User.objects(username='john')
+	self.client.login(username='john',password='john')
  
     def _fixture_teardown(self):
         Category.objects.all().delete()
         Event.objects.all().delete()
+	self.client.logout()
+        User.objects(username='john').delete()  
         
     def test_event_form_load_categories_from_db(self):
         response = self.client.get('/eventslist/addevent')
@@ -188,6 +217,9 @@ class EventFormTest(LiveServerTestCase):
         self.assertTemplateUsed(response, 'eventslist/addevent.html')
         expected_error = escape("This field is required.")
         self.assertContains(response, expected_error)
+
+       
+
 '''
     def test_for_invalid_input_passes_form_to_template(self):
         response = self.client.post('/eventslist/register',data={'username': '$'})

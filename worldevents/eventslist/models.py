@@ -10,6 +10,9 @@ class Event(Document):
    category = StringField()
    #tags = ListField()
    
+   def __str__(self):
+      return self.title +'-'+str(self.location['coordinates'][0])+str(self.location['coordinates'][1])+'-'+self.description +'-'+self.category
+
    meta = {'collection':'event'}
 
 

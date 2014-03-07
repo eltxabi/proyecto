@@ -9,12 +9,13 @@
 	{% else %}
 		<a href="{% url 'eventslist.views.register' %}">Registro</a>
 		<a href="{% url 'eventslist.views.loginpage' %}">Login</a>
+		{% if user.is_authenticated %}
+			<a href="{% url 'eventslist.views.addevent' %}">Add Event</a>
+		{% endif %}	
 	{% endif %}
 	</div>
 
 
 {% endblock %}
 
-{% block scripts %}
-aaaaaaaaaaaaaaaaaaaaaaaaa
-{% endblock %}
+

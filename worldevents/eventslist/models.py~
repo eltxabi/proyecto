@@ -5,11 +5,14 @@ connect('worldevents')
 
 class Event(Document):
    title = StringField(max_length = 64)
-   pt = PointField()
+   location = PointField()
    description = StringField()
    category = StringField()
    #tags = ListField()
    
+   def __str__(self):
+      return self.title +'-'+str(self.location['coordinates'][0])+'-'+self.description +'-'+self.category
+
    meta = {'collection':'event'}
 
 

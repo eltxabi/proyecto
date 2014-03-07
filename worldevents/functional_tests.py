@@ -105,25 +105,36 @@ class NewVisitorTest(unittest.TestCase):
       #Click in addEvent link
       add_event_links[0].click() 
 
-      #I can see an addLink form 
+      #I can see an addEvent form 
       title_input=self.browser.find_element_by_name('title')
       self.assertNotEquals(title_input,None)
       description_input=self.browser.find_element_by_name('description')
       self.assertNotEquals(description_input,None)
-      category_input=self.browser.find_element_by_name('category')
-      self.assertNotEquals(category_input,None)
-      tags_input=self.browser.find_element_by_name('tags')
-      self.assertNotEquals(tags_input,None)
-
-      #I can see a map 
-      	
+      category_select=self.browser.find_element_by_name('category')
+      self.assertNotEquals(category_select,None)
+      
       #I enter data
-          
+      title_input.send_keys('Prueba') 
+      description_input.send_keys('Esto es una prueba')
+      self.browser.find_element_by_css_selector('option[value=musica]').click() 
+      self.browser.find_element_by_id('my_map').click()
+      self.browser.find_element_by_css_selector('input[value=add]').click()  
+	
+      #I can see home page with success message
+      messages=self.browser.find_element_by_id('messages')
+      self.assertIn("Prueba has been created",messages.text) 
 
-      # Removing user mary   
+      #Removing event
+      self.remove_event('Prueba') 
+
+      #Removing user mary   
       self.remove_user('mary')
 
-
+   def remove_event(self,titulo):
+      con = Connection()	
+      db = con['worldevents']
+      events = db.event
+      events.remove({'titulo':titulo})
 
    def add_user(self,username,password):
       con = Connection()	

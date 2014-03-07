@@ -51,6 +51,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'worldevents.urls'
 
+LOGIN_URL = '/eventslist/login'
+
 WSGI_APPLICATION = 'worldevents.wsgi.application'
 
 #Test

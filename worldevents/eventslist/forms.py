@@ -37,19 +37,33 @@ class RegistrationForm(forms.Form):
 
 
 class EventForm(forms.Form):
-      
+    error_messages = {
+        'location_not_selected': "You must select a location",       
+    }    
+
+  
     title = forms.CharField(label="Title", max_length=30)
     description = forms.CharField(label="Description",widget=forms.Textarea)
 
     category = forms.ChoiceField(label="Category",widget=forms.Select)
-    lat = forms.CharField(widget=forms.HiddenInput)  
-    lng = forms.CharField(widget=forms.HiddenInput) 
+    lat = forms.CharField(required=False,widget=forms.HiddenInput)  
+    lng = forms.CharField(required=False,widget=forms.HiddenInput) 
 
     def __init__(self, *args, **kwargs):
         super(EventForm, self).__init__(*args, **kwargs)
         choices = [(unicode(pt), unicode(pt)) for pt in Category.objects.all()]
-        self.fields['category'].choices = choices       
-      
+        self.fields['category'].choices = choices
+	self.fields['category'].choices.insert(0,('','Select category'))       
+    
+    def clean(self):
+       cleaned_data = super(EventForm,self).clean()
+       lat = cleaned_data.get("lat")
+       lng = cleaned_data.get("lng")
+       
+       if not lat or not lng:
+          raise forms.ValidationError(self.error_messages['location_not_selected']) 
+       
+       return cleaned_data  
 '''
 class AuthenticationForm(forms.Form):
     """

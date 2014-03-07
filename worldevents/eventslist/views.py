@@ -7,6 +7,7 @@ from mongoengine.django.auth import User
 from django.contrib import messages
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 import mongoengine
 
 def home(request):
@@ -55,6 +56,7 @@ def logoutpage(request):
    logout(request)
    return HttpResponseRedirect("/")
 
+@login_required
 def addevent(request):
     if request.method == 'POST':
         form = EventForm(request.POST)
