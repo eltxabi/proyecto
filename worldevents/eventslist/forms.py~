@@ -1,8 +1,40 @@
 from django import forms
 from django.contrib.auth import authenticate, get_user_model
 from django.utils.text import capfirst
+from django.forms.widgets import Input
 from mongoengine.django.auth import User
 from eventslist.models import Category
+
+class RangeInput(Input):
+    input_type='range'
+
+class SearchForm(forms.Form):
+    error_messages = {
+        'location_not_selected': "You must select a location",       
+    }    
+
+  
+    title = forms.CharField(label="Title", max_length=30, required=False)
+    category = forms.ChoiceField(label="Category", required=False, widget=forms.Select)
+    lat = forms.CharField(required=False,widget=forms.HiddenInput)  
+    lng = forms.CharField(required=False,widget=forms.HiddenInput) 
+    distance = forms.CharField(required=False,label="Distance",widget=RangeInput(attrs={'min':'1','max':'50','value':'1'}))    
+ 
+    def __init__(self, *args, **kwargs):
+        super(SearchForm, self).__init__(*args, **kwargs)
+        choices = [(unicode(pt), unicode(pt)) for pt in Category.objects.all()]
+        self.fields['category'].choices = choices
+	self.fields['category'].choices.insert(0,('','Select category'))       
+    
+    def clean(self):
+       cleaned_data = super(SearchForm,self).clean()
+       lat = cleaned_data.get("lat")
+       lng = cleaned_data.get("lng")
+       
+       if not lat or not lng:
+          raise forms.ValidationError(self.error_messages['location_not_selected']) 
+       
+       return cleaned_data 
 
 class RegistrationForm(forms.Form):
     error_messages = {
@@ -52,7 +84,8 @@ class EventForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(EventForm, self).__init__(*args, **kwargs)
         choices = [(unicode(pt), unicode(pt)) for pt in Category.objects.all()]
-        self.fields['category'].choices = choices       
+        self.fields['category'].choices = choices
+	self.fields['category'].choices.insert(0,('','Select category'))       
     
     def clean(self):
        cleaned_data = super(EventForm,self).clean()

@@ -4,7 +4,7 @@ from eventslist.views import home,register,loginpage,addevent
 from eventslist.models import Event,Category
 from django.http import HttpRequest
 from django.template.loader import render_to_string
-from eventslist.forms import RegistrationForm,EventForm
+from eventslist.forms import RegistrationForm,EventForm,SearchForm
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.html import escape
@@ -28,8 +28,9 @@ class HomeTest(LiveServerTestCase):
     def test_home_page_returns_correct_html(self):
         request = HttpRequest() 
         response = home(request)  
-        expected_html = render_to_string('eventslist/home.html')
-        self.assertEqual(response.content.decode(), expected_html)
+        expected_html = render_to_string('eventslist/home.html',{
+        'form': SearchForm()})
+	self.assertEqual(response.content.decode(), expected_html)
 
 
 
@@ -149,7 +150,7 @@ class AddEventTest(LiveServerTestCase):
     
     def test_addevent_page_requires_login_user(self):
 	self.client.logout()
-	response = self.client.get('/eventslist/addevent')
+	response = self.client.get('/eventslist/addevent',follow=True)
 	self.assertEqual(response.status_code,200)
 	self.assertRedirects(response,'/eventslist/login?next=/eventslist/addevent')
     
@@ -219,6 +220,79 @@ class EventFormTest(LiveServerTestCase):
         self.assertContains(response, expected_error)
 
        
+
+class SearchTest(LiveServerTestCase):
+    def _fixture_setup(self):
+        c=Category(name='Musica')
+        c.save()
+	c=Category(name='Restauracion')
+        c.save()
+                
+        
+    def _fixture_teardown(self):
+        Category.objects.all().delete()
+        Event.objects.all().delete()
+	self.client.logout()
+	User.objects(username='john').delete() 
+            
+    def test_search_page_uses_search_form(self):
+	response = self.client.get('/')
+	self.assertIsInstance(response.context['form'], SearchForm)
+
+    def test_search_form_return_correct_event(self):
+        user=User.create_user('john','john')
+	request = HttpRequest() 
+	user=User.objects(username='john')
+	self.client.login(username='john',password='john')
+
+	response = self.client.post('/eventslist/addevent',data={'title': 'Concierto','description': 'Es un concierto','category': 'Musica','lat':'49.8','lng':'4.7'}) 
+        self.assertEqual(Event.objects(title='Concierto').count(),1) 
+	self.assertEqual(str(Event.objects(title='Concierto')),'[<Event: Concierto-49.84.7-Es un concierto-Musica>]')
+
+	response = self.client.post('/',data={'title': 'Concierto','category': 'Musica','lat':'49.8','lng':'4.7','distance':'4'}) 
+	print response.content
+	self.assertContains(response,'<td>Concierto</td>')
+	self.assertContains(response,'<td>Es un concierto</td>')
+	self.assertContains(response,'<td>Musica</td>')
+	User.objects(username='john').delete()
+	
+    
+'''problem because User object use primary database
+    def test_register_page_send_success_message_to_home(self):
+	response = self.client.post('/eventslist/register',data={'username': 'mmmm','password1': 'john','password2': 'john'},follow=True) 
+	expected_html='You have been successfully registered'
+        self.assertIn(expected_html,response.content)
+'''
+	
+class SearchFormTest(LiveServerTestCase):
+    def _fixture_setup(self):
+        c=Category(name='Musica')
+        c.save()
+	c=Category(name='Restauracion')
+        c.save()
+	user=User.create_user('john','john')
+	request = HttpRequest() 
+	user=User.objects(username='john')
+	self.client.login(username='john',password='john')
+ 
+    def _fixture_teardown(self):
+        Category.objects.all().delete()
+        Event.objects.all().delete()
+	self.client.logout()
+        User.objects(username='john').delete()  
+        
+    def test_search_form_load_categories_from_db(self):
+        response = self.client.get('/')
+        for c in Category.objects().all() :   
+            self.assertIn('<option value="'+c.name+'">'+c.name+'</option>',response.content.decode())        
+
+    def test_validation_errors_are_sent_back_to_index_template(self):
+        response = self.client.post('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'eventslist/home.html')
+        expected_error = escape("This field is required.")
+        self.assertContains(response, expected_error)
+
 
 '''
     def test_for_invalid_input_passes_form_to_template(self):
