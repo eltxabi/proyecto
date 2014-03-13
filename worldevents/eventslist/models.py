@@ -1,5 +1,6 @@
 from mongoengine import *
 from django.conf import settings
+import datetime
 
 connect('worldevents')
 
@@ -8,6 +9,7 @@ class Event(Document):
    location = PointField()
    description = StringField()
    category = StringField()
+   added_date = DateTimeField(default=datetime.datetime.now)	
    #tags = ListField()
    
    def __str__(self):

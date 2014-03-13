@@ -1,5 +1,8 @@
 {% extends "eventslist/base.html" %}
 {% load staticfiles %}
+{% block stylesheets %}
+	<link rel="stylesheet" type="text/css" href={% static "css/base.css" %} >
+{% endblock %}
 {% block javascript %}
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
@@ -23,16 +26,26 @@
 	{% endif %}
 	</div>
 	
-	{% if nearby_list %}	
+	{% if event_list %}	
 		<table>
-		{% for event in nearby_list%}
+		{% for event in event_list%}
 			<tr>
+				<td style="display:none;">{{ event.id }}</td>	
+				<td style="display:none;">{{ event.location }}</td>				
 				<td>{{ event.title }}</td>
-				<td>{{ event.description }}</td>
 				<td>{{ event.category }}</td>
 			</tr>
 		{% endfor %}
 		</table>
+
+		{% for event in event_list%}
+		<ul class="event_detail" id="{{ event.id }}">
+			<li>{{ event.title }}</li>
+			<li>{{ event.description }}</li>
+			<li>{{ event.category }}</li>
+		</ul>
+		{% endfor %}
+		<div id="map_detail"></div>
 	{% endif %}
 
 	<div>
@@ -52,7 +65,10 @@
 {% block scripts %}
  <script type="text/javascript">
 	$( document ).ready(function() {
-                $("#my_map").width("300px").height("150px").gmap3({
+	red_icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"	  
+	blue_icon="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+		
+          $("#my_map").width("300px").height("150px").gmap3({
           map:{
             options:{
               center:[46.578498,2.457275],
@@ -67,6 +83,77 @@
             }
           }
         });
+
+
+	$("#map_detail").width("300px").height("150px").gmap3({
+          map:{
+            options:{
+              center:[46.578498,2.457275],
+              zoom: 3
+            }
+          }
+        });
+
+	$("tr:first").addClass("selected_event")
+	id=($(".selected_event").find("td:first").html())
+	$("#"+id).toggle()
+	
+	addMarkers()
+	
+	
+	
+
+	$("tr").click(function(){
+		map=$("#map_detail")
+		id=($(".selected_event").find("td:first").html())
+		lat=$(".selected_event").find("td:eq(1)").html().substring($(".selected_event").find("td:eq(1)").html().indexOf("[")+1,$(".selected_event").find("td:eq(1)").html().lastIndexOf(","))
+		lng=$(".selected_event").find("td:eq(1)").html().substring($(".selected_event").find("td:eq(1)").html().lastIndexOf(",")+1,$(".selected_event").find("td:eq(1)").html().indexOf("]"))
+		map.gmap3({clear:{tag:[id]}});
+		addMarker(map,id,blue_icon,lat,lng)
+		
+		$("#"+id).toggle()
+		$(".selected_event").removeClass("selected_event")
+		$(this).addClass("selected_event")
+		id=($(this).find("td:first").html())
+		$("#"+id).toggle()
+		lat=$(this).find("td:eq(1)").html().substring($(this).find("td:eq(1)").html().indexOf("[")+1,$(this).find("td:eq(1)").html().lastIndexOf(","))
+		lng=$(this).find("td:eq(1)").html().substring($(this).find("td:eq(1)").html().lastIndexOf(",")+1,$(this).find("td:eq(1)").html().indexOf("]"))
+		map.gmap3({clear:{tag:[id]}});
+		addMarker(map,id,red_icon,lat,lng)
+		map.gmap3("get").setCenter(new google.maps.LatLng(lat,lng))
+	});
+
+	function addMarkers(){
+		map=$("#map_detail")
+		$("tr").each(function(){
+			
+			lat=$(this).find("td:eq(1)").html().substring($(this).find("td:eq(1)").html().indexOf("[")+1,$(this).find("td:eq(1)").html().lastIndexOf(","))
+			lng=$(this).find("td:eq(1)").html().substring($(this).find("td:eq(1)").html().lastIndexOf(",")+1,$(this).find("td:eq(1)").html().indexOf("]"))
+			if ($(this).hasClass("selected_event")){	
+				icon_image=red_icon		
+			}else{
+				icon_image=blue_icon
+			}
+			tag_label=($(this).find("td:first").html())
+			
+			addMarker(map,tag_label,icon_image,lat,lng)
+		});	
+	}
+
+
+	function addMarker(map,tag_label,icon_image,lat,lng){
+		map.gmap3({
+				marker:{
+					latLng:[lat,lng],
+					tag:tag_label,
+					options:{
+						draggable:true,
+						icon: icon_image
+					}
+				}
+		});
+	}
+
 	});
 
 </script>

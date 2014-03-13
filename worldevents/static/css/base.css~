@@ -1,0 +1,3 @@
+.event_detail{
+	display:none;
+}

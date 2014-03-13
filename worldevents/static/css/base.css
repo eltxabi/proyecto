@@ -1,0 +1,7 @@
+.event_detail{
+	display:none;
+}
+
+.selected_event{
+	background-color:red;
+}

@@ -23,17 +23,14 @@ def home(request):
 	    lat=form.cleaned_data['lat']
 	    lng=form.cleaned_data['lng'] 
 	    distance=form.cleaned_data['distance'] 
-	    nearby_list=Event.objects(Q(title__icontains=title) & Q(category=category) & Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)]))
-	    if nearby_list is None:
-		print "Lista vacia"
-	    else:
-		print "Hay algo"	
+	    event_list=Event.objects(Q(title__icontains=title) & Q(category=category) & Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)]))
 	    form=SearchForm()
-	    return render(request, "eventslist/home.html", {'form': form,'nearby_list':nearby_list})  
+	    return render(request, "eventslist/home.html", {'form': form,'event_list':event_list})  
    else:
+	event_list = Event.objects.order_by('added_date')
         form = SearchForm()
    return render(request, "eventslist/home.html", {
-        'form': form,
+        'form': form,,'event_list':event_list
     })  
   
 def register(request):
