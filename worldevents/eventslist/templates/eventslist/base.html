@@ -10,7 +10,13 @@
 	{% endblock %}
     </head>
     <body>
-	
+	<header>
+		<h1>WorldEvents</h1>
+		<nav>
+			{% block nav %}
+	 		{% endblock %}		
+		</nav>
+	</header>
 	<div id='messages'>
 		{% if messages %}
 			<ul class="messages">

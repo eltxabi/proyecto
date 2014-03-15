@@ -9,22 +9,28 @@
 	<script type="text/javascript" src={% static "javascript/gmap3.min.js" %}></script>
 
 {% endblock %}
-{% block content %}
-<div>
-		
-	{% if user.is_authenticated %}	
-			{{user.username}}
-			<a href="{% url 'eventslist.views.logoutpage' %}">Logout</a>
-		
-	{% else %}
-		<a href="{% url 'eventslist.views.register' %}">Registro</a>
-		<a href="{% url 'eventslist.views.loginpage' %}">Login</a>
+
+{% block nav %}
+<ul>
+{% if user.is_authenticated %}	
+	{{user.username}}
+	<li><a href="{% url 'eventslist.views.logoutpage' %}">Logout</a></li>
+	<li><a class="form" href="{% url 'eventslist.views.addevent' %}">Add Event</a></li>
 			
-	{% endif %}
-	{% if user.is_authenticated %}
-		<a href="{% url 'eventslist.views.addevent' %}">Add Event</a>
-	{% endif %}
-	</div>
+{% else %}
+	<li><a class="form" href="{% url 'eventslist.views.register' %}">Registro</a></li>
+	<li><a class="form" href="{% url 'eventslist.views.loginpage' %}">Login</a></li>
+
+{% endif %}
+
+	<li><a class="form" href="{% url 'eventslist.views.searchevents' %}">Search</a></li>
+	
+</ul>
+{% endblock %}	
+
+{% block content %}
+
+
 	
 	{% if event_list %}	
 		<table>
@@ -47,24 +53,18 @@
 		{% endfor %}
 		<div id="map_detail"></div>
 	{% endif %}
-
-	<div>
-	  {% if form %}
-	  <form action="" method="post">
-	      {{ form.as_p }}
-              <p>Select location in the map</p>
-              <div id="Location">Location:</div>
-              <div id="my_map"></div>
-	      {% csrf_token %} 
-	      <input type="submit" value="search">
-	  </form>
-  	{% endif %}
+	
+	<div id="form_container">
 	</div>
+
+
 
 {% endblock %}
 {% block scripts %}
  <script type="text/javascript">
-	$( document ).ready(function() {
+	$( document ).ready(init());
+
+	function init() {
 	red_icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"	  
 	blue_icon="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
 		
@@ -89,7 +89,7 @@
           map:{
             options:{
               center:[46.578498,2.457275],
-              zoom: 3
+              zoom: 5
             }
           }
         });
@@ -100,7 +100,37 @@
 	
 	addMarkers()
 	
+	$(".form").on("click",function(e){
+		e.preventDefault()
+		$("#form_container").load($(this).attr("href"),function(){
+		show_form_container()
+		});
+		
+		
+	});
 	
+	$("#form_container").on("submit","form",function(e){
+		e.preventDefault();
+		var postData = $(this).serializeArray();
+		var formUrl = $(this).attr("action");
+		$.ajax({
+			url:formUrl,
+			type:"POST",
+			data:postData,
+			success:function(data,textStatus,jqXHR)
+			{
+				if (data.indexOf("<html>")!=-1){
+					document.write(data)
+				}else{
+					$("#form_container").html(data);
+					show_close_link()
+				}
+			},
+			error:function(jqXHR,textStatus,errorThrown)
+			{}
+		});
+		e.unBind();
+	});
 	
 
 	$("tr").click(function(){
@@ -122,8 +152,10 @@
 		addMarker(map,id,red_icon,lat,lng)
 		map.gmap3("get").setCenter(new google.maps.LatLng(lat,lng))
 	});
+	
+	}
 
-	function addMarkers(){
+function addMarkers(){
 		map=$("#map_detail")
 		$("tr").each(function(){
 			
@@ -154,7 +186,23 @@
 		});
 	}
 
-	});
+	function show_form_container()
+	{	
+		$("body").append("<div id='shade'></div>")
+		$("#form_container").css("display","block")
+		show_close_link()
+		
+	}
+
+	function show_close_link()
+	{
+		$("#form_container").append("<div class='close'><a href=''>X</a></div>");
+		$(".close").click(function(){
+			$("#shade").remove();
+			$("#form_container").html("");
+		});	
+	}
+	
 
 </script>
 {% endblock %}

@@ -10,7 +10,13 @@
 	{% endblock %}
     </head>
     <body>
-	
+	<header>
+		<h1>WorldEvents</h1>
+		<nav>
+			{% block nav %}
+	 		{% endblock %}		
+		</nav>
+	</header>
 	<div id='messages'>
 		{% if messages %}
 			<ul class="messages">
@@ -23,12 +29,11 @@
 	</div>
 	 {% block content %}
 	 {% endblock %}
-       
+    
+     {% block scripts %}
+     {% endblock %}   
     </body>
+    
 </html>
-{% block scripts %}
-$( document ).ready(function() {
-	console.log( "ready!" );
-	});
-{% endblock %}
+
 

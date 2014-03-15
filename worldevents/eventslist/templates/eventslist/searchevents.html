@@ -1,19 +1,15 @@
-<h1>Add Event</h1>
-
-	  <form action="{% url 'addevent' %}" method="post">
+	
+	  <form action="{% url 'searchevents' %}" method="post">
 	      {{ form.as_p }}
               <p>Select location in the map</p>
               <div id="Location">Location:</div>
               <div id="my_map"></div>
 	      {% csrf_token %} 
-	      <input type="submit" value="add">
+	      <input type="submit" value="search">
 	  </form>
- 
-
-
- <script type="text/javascript">
-	$( document ).ready(function() {
-                $("#my_map").width("300px").height("150px").gmap3({
+  
+<script type="text/javascript">	
+          $("#my_map").width("300px").height("150px").gmap3({
           map:{
             options:{
               center:[46.578498,2.457275],
@@ -28,9 +24,4 @@
             }
           }
         });
-	});
-
 </script>
-
-
-

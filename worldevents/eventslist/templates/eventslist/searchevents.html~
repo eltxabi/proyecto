@@ -1,0 +1,10 @@
+	
+	  <form action="{% url 'searchevents' %}" method="post">
+	      {{ form.as_p }}
+              <p>Select location in the map</p>
+              <div id="Location">Location:</div>
+              <div id="my_map"></div>
+	      {% csrf_token %} 
+	      <input type="submit" value="search">
+	  </form>
+  	
