@@ -15,6 +15,11 @@ def home(request):
    if hasattr(request,'session'):
 	   for s in request.session.iteritems():
 		messages.success(request,s) 
+   
+   event_list = Event.objects.order_by('added_date')
+   return render(request, "eventslist/home.html", {'event_list':event_list,})  
+
+def searchevents(request):
    if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -25,11 +30,10 @@ def home(request):
 	    distance=form.cleaned_data['distance'] 
 	    event_list=Event.objects(Q(title__icontains=title) & Q(category=category) & Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)]))
 	    form=SearchForm()
-	    return render(request, "eventslist/home.html", {'form': form,'event_list':event_list})  
+	    return render(request, "eventslist/home.html", {'event_list':event_list,})  
    else:
-	event_list = Event.objects.order_by('added_date')
-        form = SearchForm()
-   return render(request, "eventslist/home.html", {'form':form,'event_list':event_list})  
+	form = SearchForm()
+   return render(request, "eventslist/searchevents.html", {'form':form,})     
   
 def register(request):
     if request.method == 'POST':

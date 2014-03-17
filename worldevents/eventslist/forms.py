@@ -68,6 +68,7 @@ class RegistrationForm(forms.Form):
        return cleaned_data	
 
 
+
 class EventForm(forms.Form):
     error_messages = {
         'location_not_selected': "You must select a location",       
