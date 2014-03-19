@@ -10,6 +10,8 @@ from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from mongoengine import *
+from django.conf import settings
+from time import time
 
 def home(request):
    if hasattr(request,'session'):
@@ -78,21 +80,29 @@ def logoutpage(request):
 @login_required
 def addevent(request):
     if request.method == 'POST':
-        form = EventForm(request.POST)
-        if form.is_valid():
+	form = EventForm(request.POST, request.FILES)
+	
+	if form.is_valid():
             title=form.cleaned_data['title']
 	    description=form.cleaned_data['description']
             category=form.cleaned_data['category'] 
 	    lat=form.cleaned_data['lat']
-	    lng=form.cleaned_data['lng']		
-            event = Event(title=title,description=description,category=category)
-	    event.location=[float(lat),float(lng)] 
+	    lng=form.cleaned_data['lng']
+	    event = Event(title=title,description=description,category=category)		
+	    if (request.FILES):
+		photo_name=request.user.username+"-"+str(int(time()))+".jpeg"
+		f=request.FILES["photo"]
+		with open(settings.MEDIA_ROOT+photo_name, 'wb+') as destination:
+        		for chunk in f.chunks():
+            			destination.write(chunk)
+	    	event.photo=photo_name
+            event.location=[float(lat),float(lng)] 
             event.save() 	
             messages.success(request, title + ' has been created')
             return HttpResponseRedirect("/")
     else:
-        form = EventForm()
-       
+	form = EventForm()
+      
     return render(request,'eventslist/addevent.html', {
         'form': form,
     })  

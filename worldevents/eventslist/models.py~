@@ -1,15 +1,17 @@
 from mongoengine import *
 from django.conf import settings
 import datetime
+from PIL import *
 
 connect('worldevents')
 
 class Event(Document):
    title = StringField(max_length = 64)
+   photo = StringField(max_length = 64)
    location = PointField()
    description = StringField()
    category = StringField()
-   added_date = DateTimeField(default=datetime.now)	
+   added_date = DateTimeField(default=datetime.datetime.now)	
    #tags = ListField()
    
    def __str__(self):

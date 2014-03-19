@@ -68,48 +68,17 @@ class RegistrationForm(forms.Form):
        return cleaned_data	
 
 
-class LoginForm(forms.Form):
-    error_messages = {
-        'incorrect_login': "Your username or password is wrong",
-    }
-    username = forms.RegexField(label="Username", max_length=30,
-        regex=r'^[\w.@+-]+$',
-        help_text="Required. 30 characters or fewer. Letters, digits and "
-                      "@/./+/-/_ only.",
-        error_messages={
-            'invalid': "This value may contain only letters, numbers and "
-                         "@/./+/-/_ characters."})
-    password1 = forms.CharField(label="Password",
-        widget=forms.PasswordInput)
-    password2 = forms.CharField(label="Password confirmation",
-        widget=forms.PasswordInput,
-        help_text="Enter the same password as above, for verification.")
-
-    def clean(self):
-       cleaned_data = super(RegistrationForm,self).clean()
-       user_name = cleaned_data.get("username")
-       password1 = cleaned_data.get("password1")
-       password2 = cleaned_data.get("password2")
-       if password1!=password2:
-          raise forms.ValidationError(self.error_messages['password_mismatch']) 
-       
-       if User.objects(username=user_name).count()==1:
-	  raise forms.ValidationError(self.error_messages['duplicate_username'])     
-
-       return cleaned_data	
-
-
 
 class EventForm(forms.Form):
     error_messages = {
         'location_not_selected': "You must select a location",       
     }    
 
-  
     title = forms.CharField(label="Title", max_length=30)
     description = forms.CharField(label="Description",widget=forms.Textarea)
-
+    photo = forms.ImageField(required=False)
     category = forms.ChoiceField(label="Category",widget=forms.Select)
+    	
     lat = forms.CharField(required=False,widget=forms.HiddenInput)  
     lng = forms.CharField(required=False,widget=forms.HiddenInput) 
 

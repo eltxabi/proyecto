@@ -6,6 +6,7 @@ connect('worldevents')
 
 class Event(Document):
    title = StringField(max_length = 64)
+   photo = StringField(max_length = 64)
    location = PointField()
    description = StringField()
    category = StringField()

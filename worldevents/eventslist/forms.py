@@ -74,11 +74,10 @@ class EventForm(forms.Form):
         'location_not_selected': "You must select a location",       
     }    
 
-  
     title = forms.CharField(label="Title", max_length=30)
     description = forms.CharField(label="Description",widget=forms.Textarea)
-
     category = forms.ChoiceField(label="Category",widget=forms.Select)
+    photo = forms.ImageField(required=False)	
     lat = forms.CharField(required=False,widget=forms.HiddenInput)  
     lng = forms.CharField(required=False,widget=forms.HiddenInput) 
 
