@@ -67,8 +67,9 @@ class RegistrationForm(forms.Form):
 
        return cleaned_data	
 
-
-
+class CommentForm(forms.Form):
+    content = forms.CharField(widget=forms.Textarea)
+    
 class EventForm(forms.Form):
     error_messages = {
         'location_not_selected': "You must select a location",       
@@ -76,9 +77,8 @@ class EventForm(forms.Form):
 
     title = forms.CharField(label="Title", max_length=30)
     description = forms.CharField(label="Description",widget=forms.Textarea)
-    photo = forms.ImageField(required=False)
     category = forms.ChoiceField(label="Category",widget=forms.Select)
-    	
+    photo = forms.ImageField(required=False)	
     lat = forms.CharField(required=False,widget=forms.HiddenInput)  
     lng = forms.CharField(required=False,widget=forms.HiddenInput) 
 

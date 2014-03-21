@@ -31,7 +31,7 @@
 {% block content %}
 
 
-	
+	<div id="container">
 	{% if event_list %}	
 		<table>
 		{% for event in event_list%}
@@ -49,12 +49,17 @@
 			<li>{{ event.title }}</li>
 			<li>{{ event.description }}</li>
 			<li>{{ event.category }}</li>
-			<li><img src="{% static "media/" %}{{ event.photo }}"></li>
+			{% if event.photo %}
+				<li><img src="{% static "media/" %}{{ event.photo }}"></li>
+			{% endif %}
+			<div class="comments">
+			{% include "eventslist/comments.html" %}
+			</div>
 		</ul>
 		{% endfor %}
 		<div id="map_detail"></div>
 	{% endif %}
-	
+	<div>
 	<div id="form_container">
 	</div>
 
@@ -84,6 +89,19 @@
 	$("tr:first").addClass("selected_event")
 	id=($(".selected_event").find("td:first").html())
 	$("#"+id).toggle()
+
+	$(".comments a").on("click",function(e){
+		e.preventDefault()
+		if ($(this).text()=="Add comment"){
+			$(this).text("Close")
+			$(".event_detail[style='display: block;'] form").show()
+			
+		}else{
+			$(this).text("Add comment")
+			$(".event_detail[style='display: block;'] form").hide()
+		}
+		
+	});
 	
 	addMarkers()
 	
@@ -96,11 +114,41 @@
 		
 	});
 	
+	$("ul.event_detail").on("submit","form",function(e){
+		e.preventDefault();
+		var postData = new FormData()
+		
+		$("textarea",this).add("input:not([type='submit'])",this).each(function(i) {
+        		postData.append($(this).attr("name"), $(this).val());
+		});
+		postData.append("event_id",$("ul.event_detail[style='display: block;']").attr("id"))
+
+		var formUrl = $(this).attr("action");
+
+		$.ajax({
+			url:formUrl,
+			type:"POST",
+			data:postData,
+			processData: false,
+			contentType: false,
+			success:function(data,textStatus,jqXHR)
+			{
+				alert(data)
+				$("ul.event_detail[style='display: block;'] .comments").html(data);
+			},
+			error:function(jqXHR,textStatus,errorThrown)
+			{alert(errorThrown)}
+		});
+	});
+
 	$("#form_container").on("submit","form",function(e){
 		e.preventDefault();
 		//var postData = $(this).serializeArray();
 		var postData = new FormData()
-		postData.append("photo", $('#id_photo').get(0).files[0]);
+		$("#form_container form input[type='file']").each(function(i) {
+			postData.append($(this).attr("name"), $(this).get(0).files[0]);
+		});
+		//postData.append("photo", $('#id_photo').get(0).files[0]);
 
     $("form textarea, form select, form input:not([type='submit']):not([name='photo'])").each(function(i) {
         postData.append($(this).attr("name"), $(this).val());
@@ -138,6 +186,9 @@
 		map.gmap3({clear:{tag:[id]}});
 		addMarker(map,id,blue_icon,lat,lng)
 		
+		$("#"+id+" a").text("Add comment")
+		$("#"+id+" form").hide()
+
 		$("#"+id).toggle()
 		$(".selected_event").removeClass("selected_event")
 		$(this).addClass("selected_event")

@@ -40,3 +40,38 @@ header{
 	font-size:1em;
 	color: white;
 }
+
+.comments form{
+	display:none;
+}
+
+#container{
+	border-style:solid;
+	border-width:medium;
+}
+
+#container table{
+	display:inline;
+	float:left;
+}
+
+#container ul{
+	width:40%;
+}
+
+#container ul[style*="display: block"] {
+	display:inline;
+	float:left;
+	background-color:green;
+}
+
+#container map{
+	display:inline;
+	float:left;
+}
+
+
+
+
+
+

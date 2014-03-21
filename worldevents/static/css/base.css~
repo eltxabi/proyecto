@@ -16,7 +16,8 @@ header{
 	background-color:grey;
 	width:20em;
 	z-index:200;
-	margin:auto;
+	margin-left:auto;
+	margin-right:auto;
 }
 
 #shade{
@@ -39,3 +40,38 @@ header{
 	font-size:1em;
 	color: white;
 }
+
+.comments form{
+	display:none;
+}
+
+#container{
+	border-style:solid;
+	border-width:medium;
+}
+
+#container table{
+	display:inline;
+	float:left;
+}
+
+#container ul{
+	width:5em;
+}
+
+#container ul[style*="display: block"] {
+	display:inline;
+	float:left;
+	background-color:green;
+}
+
+#container map{
+	display:inline;
+	float:left;
+}
+
+
+
+
+
+

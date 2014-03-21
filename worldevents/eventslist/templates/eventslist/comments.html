@@ -1,0 +1,13 @@
+			{% if user.is_authenticated %}			
+				<a href='#'>Add comment</a>			
+				<form action="{% url 'addcomment' %}" method="post">
+		      			{{ form.as_p }}
+		    			{% csrf_token %} 
+		      			<input type="submit" value="add">
+				</form>
+			{% endif %}
+			{% if event.comments %}
+				{% for comment in event.comments%}
+				<li>{{comment.content}}</li>
+				{% endfor %}
+			{% endif %}

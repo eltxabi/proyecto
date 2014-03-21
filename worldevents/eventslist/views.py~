@@ -1,6 +1,6 @@
 
-from eventslist.forms import RegistrationForm,EventForm,SearchForm
-from eventslist.models import Category,Event
+from eventslist.forms import RegistrationForm,EventForm,SearchForm,CommentForm
+from eventslist.models import Category,Event,Comment
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from mongoengine.queryset import Q
@@ -19,7 +19,24 @@ def home(request):
 		messages.success(request,s) 
    
    event_list = Event.objects.order_by('added_date')
-   return render(request, "eventslist/home.html", {'event_list':event_list,})  
+   form = CommentForm()
+   return render(request, "eventslist/home.html", {'event_list':event_list,'form':form,})  
+
+def addcomment(request):
+   if request.method == 'POST':
+	event_id=request.POST['event_id']
+	form = CommentForm(request.POST)
+	if form.is_valid():
+	    content=form.cleaned_data['content']
+	    user=request.user.username
+	    comment=Comment(content=content,user=user)
+            Event.objects(id=event_id).update_one(push__comments=comment)
+	    form = CommentForm()
+   else:
+	form = CommentForm()
+
+   event=Event.objects.get(id=event_id) 
+   return render(request, "eventslist/comments.html", {'form':form,'event':event}) 
 
 def searchevents(request):
    if request.method == 'POST':
@@ -81,7 +98,7 @@ def logoutpage(request):
 def addevent(request):
     if request.method == 'POST':
 	form = EventForm(request.POST, request.FILES)
-	print(request.FILES["photo"]).name
+	
 	if form.is_valid():
             title=form.cleaned_data['title']
 	    description=form.cleaned_data['description']

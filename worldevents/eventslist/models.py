@@ -4,13 +4,22 @@ import datetime
 
 connect('worldevents')
 
+class Comment(EmbeddedDocument):
+   content = StringField()
+   user = StringField() 
+   added_date = DateTimeField(default=datetime.datetime.now)	 
+
+   def __str__(self):
+      return self.content	
+
 class Event(Document):
    title = StringField(max_length = 64)
    photo = StringField(max_length = 64)
    location = PointField()
    description = StringField()
    category = StringField()
-   added_date = DateTimeField(default=datetime.datetime.now)	
+   added_date = DateTimeField(default=datetime.datetime.now)
+   comments = ListField(EmbeddedDocumentField(Comment))	
    #tags = ListField()
    
    def __str__(self):
