@@ -1,14 +1,60 @@
+*{
+	margin: 0;
+}
+
+body{
+	background-color:rgb(228, 235, 239);
+}
+
+header{
+	background-color:#A1FED1;
+	
+}
+
+h1{
+	display: inline;
+}
+
+h2{
+	display: inline;
+	margin-left:0.5em;
+	
+}
+
+nav{
+	display: inline;	
+}
+
+nav ul{
+	display: inline;
+	list-style: none;
+	
+}
+
+nav ul li{
+	display: inline;
+	padding-left: 0.5em;
+	border-left: solid 0.5em;
+	font-size: 2em;
+}
+
+nav ul li a{
+	text-decoration: none;
+}
+
 .event_detail{
 	display:none;
 }
+
+#messages{
+	
+}
+
 
 .selected_event{
 	background-color:red;
 }
 
-header{
-	background-color:yellow;
-}
 
 #form_container{
 	position:absolute;
@@ -46,28 +92,107 @@ header{
 }
 
 #container{
-	border-style:solid;
-	border-width:medium;
+	
 }
 
 #container table{
+	background-color: white;
 	display:inline;
 	float:left;
+	margin:0.3em;
+	padding: 0.1em;
+	border-radius: 0.4em;
+	box-shadow: 0.2em 0.2em 0.5em #888888;
 }
 
-#container ul{
+#container > ul{
+	margin-left:2%;
+	margin-right:2%;
 	width:40%;
 }
 
 #container ul[style*="display: block"] {
+	background-color: white;
 	display:inline;
 	float:left;
-	background-color:green;
+	margin:0.3em;
+	padding: 0.1em;
+	border-radius: 0.4em;
+	box-shadow: 0.2em 0.2em 0.5em #888888;
 }
 
-#container map{
+#container ul li{
+	list-style: none;
+}
+
+#container ul[style*="display: block"] > li{
+	padding:0.5em;
+}
+
+#container ul[style*="display: block"] > li:first-child{
+	font-size:2em;
+	text-align:center;
+}
+
+#container ul[style*="display: block"] > li:nth-child(2){
+	font-size:1.5em;
+	color: grey;
+}
+
+#container ul[style*="display: block"] > li:nth-child(3){
+	font-size:1em;
+	background-color:blue;
+	color:white;
+	display:inline;
+	border-radius: 0.4em;
+	padding: 0.2em;
+}
+
+#container ul[style*="display: block"] > li:nth-child(4){
+	text-align:center;
+}
+
+#container ul[style*="display: block"] img{
+	width:70%;
+}
+
+.comments{
+	margin-top:0.7em;
+}
+
+.comments ul{
+	padding:0;
+	
+}
+
+.comments ul li{
+	border: solid grey 0.1em; 
+	border-radius: 0.4em;
+	
+	
+}
+
+.comments ul li p:first-child{
+	font-size:2em; 
+}
+
+#container ul[style*="display: block"] a{
+	text-decoration:none;
+	
+	
+}
+
+
+#map_detail{
 	display:inline;
 	float:left;
+	margin:0.3em;
+	padding: 0.1em;
+	border-radius: 0.4em;
+	box-shadow: 0.2em 0.2em 0.5em #888888;
+	width: 30%;
+	height: 300px;
+
 }
 
 

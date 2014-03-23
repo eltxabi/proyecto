@@ -9,11 +9,14 @@
 	<script type="text/javascript" src={% static "javascript/gmap3.min.js" %}></script>
 
 {% endblock %}
-
+{% block user %}
+	{% if user.is_authenticated %}	
+		<h2>{{user.username}}</h2>
+	{% endif %}
+{% endblock %}
 {% block nav %}
 <ul>
 {% if user.is_authenticated %}	
-	{{user.username}}
 	<li><a href="{% url 'eventslist.views.logoutpage' %}">Logout</a></li>
 	<li><a class="form" href="{% url 'eventslist.views.addevent' %}">Add Event</a></li>
 			
@@ -77,7 +80,7 @@
 
 
 
-	$("#map_detail").width("300px").height("150px").gmap3({
+	$("#map_detail").gmap3({
           map:{
             options:{
               center:[46.578498,2.457275],

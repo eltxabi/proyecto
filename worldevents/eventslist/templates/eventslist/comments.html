@@ -6,8 +6,15 @@
 		      			<input type="submit" value="add">
 				</form>
 			{% endif %}
+			
 			{% if event.comments %}
+				<ul>
 				{% for comment in event.comments%}
-				<li>{{comment.content}}</li>
+				<li>
+					<p>{{comment.user}}</p>
+					<p>{{comment.content}}</p>
+				</li>
 				{% endfor %}
+				</ul>
 			{% endif %}
+			
