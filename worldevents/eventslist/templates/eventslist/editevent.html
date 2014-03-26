@@ -1,0 +1,73 @@
+{% load staticfiles %}
+<h1>Edit Event</h1>
+
+	  <form enctype="multipart/form-data" action="{% url 'eventslist.views.editevent' %}/{{ id }}" method="post">
+	      {{ form.as_p }}
+	      <img src= "{% static "media/" %}{{photo}}" alt="preview image"/>	
+	      <p>Select location in the map</p>
+              <!--<div id="Location">Location:</div>-->
+              <div id="map_addevent"></div>
+	      {% csrf_token %} 
+	      <input type="submit" value="Save">
+	  </form>
+ 
+
+
+ <script type="text/javascript">
+	
+	$( document ).ready(function() {
+	  red_icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"	
+          $("#map_addevent").width("300px").height("150px").gmap3({
+          map:{
+            options:{
+              center:[46.578498,2.457275],
+              zoom: 3
+            },
+            events:{
+              click: function(map,event){
+                //$("#Location").text("Location: Lat: "+event.latLng.lat()+" Lon: "+event.latLng.lng());
+		$("#id_lat").val(event.latLng.lat());
+		$("#id_lng").val(event.latLng.lng());
+		drawMarker(event.latLng.lat(),event.latLng.lng())
+              }
+            }
+          }
+        });
+
+	//if location already selected
+	if (($("#id_lat").val())&&($("#id_lng").val())){
+		drawMarker($("#id_lat").val(),$("#id_lng").val())	
+	}
+
+	$("input[type='file']").bind("change",function(){
+		file=$(this).prop("files")[0]
+		img = $("form img[alt='preview image']")
+		var reader = new FileReader();
+		reader.onload = function(e){
+			img.attr('src',e.target.result)
+		}
+    		reader.readAsDataURL(file);
+	});
+
+	function drawMarker(lat,lng){
+		$("#map_addevent").gmap3({
+				clear:{
+					tag:["selected"]
+				},
+				marker:{
+					latLng:[lat,lng],
+					tag:"selected",
+					options:{
+						draggable:true,
+						icon: red_icon
+					}
+				}
+		});
+	}
+
+
+	});
+
+</script>
+
+

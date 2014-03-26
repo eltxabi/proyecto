@@ -55,6 +55,10 @@
 			{% if event.photo %}
 				<li><img src="{% static "media/" %}{{ event.photo }}"></li>
 			{% endif %}
+			{% if user.is_authenticated and user.username == event.user%}
+				<a class="form" href="{% url 'eventslist.views.editevent' %}/{{ event.id }}">Edit</a>
+				<a class="form" href="{% url 'eventslist.views.deleteevent' %}/{{ event.id }}">Delete</a>
+			{% endif %}
 			<div class="comments">
 			{% include "eventslist/comments.html" %}
 			</div>
@@ -93,18 +97,7 @@
 	id=($(".selected_event").find("td:first").html())
 	$("#"+id).toggle()
 
-	$(".comments a").on("click",function(e){
-		e.preventDefault()
-		if ($(this).text()=="Add comment"){
-			$(this).text("Close")
-			$(".event_detail[style='display: block;'] form").show()
-			
-		}else{
-			$(this).text("Add comment")
-			$(".event_detail[style='display: block;'] form").hide()
-		}
-		
-	});
+	
 	
 	addMarkers()
 	
@@ -136,7 +129,7 @@
 			contentType: false,
 			success:function(data,textStatus,jqXHR)
 			{
-				alert(data)
+				
 				$("ul.event_detail[style='display: block;'] .comments").html(data);
 			},
 			error:function(jqXHR,textStatus,errorThrown)
@@ -242,6 +235,10 @@ function addMarkers(){
 		$("body").append("<div id='shade'></div>")
 		$("#form_container").css("display","block")
 		show_close_link()
+		$("input[value='Cancel']").click(function(){
+			$("#shade").remove();
+			$("#form_container").html("");
+		});	
 		
 	}
 
@@ -253,6 +250,8 @@ function addMarkers(){
 			$("#form_container").html("");
 		});	
 	}
+
+
 	
 
 

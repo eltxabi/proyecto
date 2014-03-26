@@ -108,7 +108,7 @@ nav ul li a{
 #container > ul{
 	margin-left:2%;
 	margin-right:2%;
-	width:40%;
+	width:30%;
 }
 
 #container ul[style*="display: block"] {
@@ -195,6 +195,9 @@ nav ul li a{
 
 }
 
+#form_container img{
+	width:70%;
+}
 
 
 

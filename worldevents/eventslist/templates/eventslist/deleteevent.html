@@ -1,0 +1,8 @@
+<h1>Delete Event</h1>
+
+	  <form action="{% url 'eventslist.views.deleteevent' %}/{{ id }}" method="post">
+	      <p>Delete Event,¿are you sure?</p>
+              {% csrf_token %} 
+	      <input type="submit" value="Delete">
+	      <input type="button" value="Cancel">	
+	  </form>

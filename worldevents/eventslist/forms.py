@@ -67,6 +67,7 @@ class RegistrationForm(forms.Form):
 
        return cleaned_data	
 
+
 class CommentForm(forms.Form):
     content = forms.CharField(label="Comment",widget=forms.Textarea)
     

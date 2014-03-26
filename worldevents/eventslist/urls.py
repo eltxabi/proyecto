@@ -2,6 +2,10 @@ from django.conf.urls import patterns, include, url
 from eventslist import views
 
 urlpatterns = patterns('',
+    url(r'^deleteevent/(\w+)$', views.deleteevent, name='deleteevent'),
+    url(r'^deleteevent$', views.deleteevent, name='deleteevent'),
+    url(r'^editevent/(\w+)$', views.editevent, name='editevent'),
+    url(r'^editevent$', views.editevent, name='editevent'),
     url(r'^searchevents$', views.searchevents, name='searchevents'),	
     url(r'^addevent$', views.addevent, name='addevent'),
     url(r'^addcomment$', views.addcomment, name='addcomment'),

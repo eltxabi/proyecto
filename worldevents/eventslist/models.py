@@ -20,6 +20,7 @@ class Event(Document):
    category = StringField()
    added_date = DateTimeField(default=datetime.datetime.now)
    comments = ListField(EmbeddedDocumentField(Comment))	
+   user = StringField()
    #tags = ListField()
    
    def __str__(self):

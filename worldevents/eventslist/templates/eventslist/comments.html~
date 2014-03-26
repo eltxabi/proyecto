@@ -1,12 +1,12 @@
 			{% if user.is_authenticated %}			
-				<a href='#'>Add comment</a>			
+				<a href='comment'>Add comment</a>			
 				<form action="{% url 'addcomment' %}" method="post">
 		      			{{ form.as_p }}
 		    			{% csrf_token %} 
 		      			<input type="submit" value="add">
 				</form>
 			{% endif %}
-			<div>
+			
 			{% if event.comments %}
 				<ul>
 				{% for comment in event.comments%}
@@ -17,4 +17,19 @@
 				{% endfor %}
 				</ul>
 			{% endif %}
-			</div>
+			
+<script type="text/javascript">
+$("a[href='comment']").on("click",function(e){
+		e.preventDefault()
+		if ($(this).text()=="Add comment"){
+			alert("aqui")
+			$(this).text("Close")
+			$(".event_detail[style='display: block;'] form").show()
+			
+		}else{
+			$(this).text("Add comment")
+			$(".event_detail[style='display: block;'] form").hide()
+		}
+		
+	});
+</script>

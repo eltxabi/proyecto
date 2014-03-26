@@ -20,10 +20,11 @@ class Event(Document):
    category = StringField()
    added_date = DateTimeField(default=datetime.datetime.now)
    comments = ListField(EmbeddedDocumentField(Comment))	
+   user = StringField()
    #tags = ListField()
    
    def __str__(self):
-      return self.title +'-'+str(self.location['coordinates'][0])+str(self.location['coordinates'][1])+'-'+self.description +'-'+self.category+'-'+self.comments
+      return self.title +'-'+str(self.location['coordinates'][0])+str(self.location['coordinates'][1])+'-'+self.description +'-'+self.category
 
    meta = {'collection':'event'}
 

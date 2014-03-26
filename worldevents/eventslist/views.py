@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from mongoengine import *
 from django.conf import settings
 from time import time
+import os
 
 def home(request):
    if hasattr(request,'session'):
@@ -106,7 +107,8 @@ def addevent(request):
             category=form.cleaned_data['category'] 
 	    lat=form.cleaned_data['lat']
 	    lng=form.cleaned_data['lng']
-	    event = Event(title=title,description=description,category=category)		
+	    user=request.user.username
+	    event = Event(title=title,description=description,category=category,user=user)		
 	    if (request.FILES):
 		photo_name=request.user.username+"-"+str(int(time()))+".jpeg"
 		f=request.FILES["photo"]
@@ -124,4 +126,58 @@ def addevent(request):
     return render(request,'eventslist/addevent.html', {
         'form': form,
     })  
+
+
+@login_required
+def deleteevent(request,event_id):
+    if request.method == 'POST':
+	event=Event.objects(id=event_id)[0]
+	os.remove(settings.MEDIA_ROOT+event.photo)
+	event.delete()
+	return HttpResponseRedirect("/")
+    
+    return render(request,'eventslist/deleteevent.html', {
+        'id': event_id,
+    }) 
+
+@login_required
+def editevent(request,event_id):
+    if request.method == 'POST':
+	form = EventForm(request.POST, request.FILES)
+	
+	if form.is_valid():
+            title=form.cleaned_data['title']
+	    description=form.cleaned_data['description']
+            category=form.cleaned_data['category'] 
+	    photo=Event.objects(id=event_id)[0].photo
+	    lat=form.cleaned_data['lat']
+	    lng=form.cleaned_data['lng']
+	    user=request.user.username
+	    event = Event(id=event_id,title=title,description=description,category=category,photo=photo,user=user)		
+	    if (request.FILES):
+		if photo is not None:
+			print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+			os.remove(settings.MEDIA_ROOT+photo)	
+		photo_name=request.user.username+"-"+str(int(time()))+".jpeg"
+		f=request.FILES["photo"]
+		with open(settings.MEDIA_ROOT+photo_name, 'wb+') as destination:
+        		for chunk in f.chunks():
+            			destination.write(chunk)
+	    	event.photo=photo_name
+            event.location=[float(lat),float(lng)] 
+            event.save() 	
+            messages.success(request, title + ' has been updated')
+            return HttpResponseRedirect("/")
+    else:
+	form = EventForm()
+	event=Event.objects(id=event_id)[0]
+	form.fields["title"].initial = event.title
+	form.fields["description"].initial = event.description
+	form.fields["category"].initial = event.category
+	form.fields["lat"].initial = event.location['coordinates'][0]
+	form.fields["lng"].initial = event.location['coordinates'][1]
+	      
+    return render(request,'eventslist/editevent.html', {
+        'form': form, 'photo': event.photo, 'id': event_id,
+    }) 
 
