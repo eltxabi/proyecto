@@ -101,6 +101,20 @@
 	
 	addMarkers()
 	
+	$("a[href='comment']").on("click",function(e){
+		e.preventDefault()
+		if ($(this).text()=="Add comment"){
+			$(this).text("Close")
+			$(".event_detail[style='display: block;'] form").show()
+			
+		}else{
+			$(this).text("Add comment")
+			$(".event_detail[style='display: block;'] form").hide()
+		}
+		
+	});
+
+
 	$(".form").on("click",function(e){
 		e.preventDefault()
 		$("#form_container").load($(this).attr("href"),function(){
@@ -162,6 +176,7 @@
 			{
 				if (data.indexOf("<html>")!=-1){
 					document.write(data)
+					
 				}else{
 					$("#form_container").html(data);
 					show_close_link()
@@ -182,7 +197,7 @@
 		map.gmap3({clear:{tag:[id]}});
 		addMarker(map,id,blue_icon,lat,lng)
 		
-		$("#"+id+" a").text("Add comment")
+		$("a[href='comment']").text("Add comment")
 		$("#"+id+" form").hide()
 
 		$("#"+id).toggle()
@@ -196,6 +211,11 @@
 		addMarker(map,id,red_icon,lat,lng)
 		map.gmap3("get").setCenter(new google.maps.LatLng(lat,lng))
 	});
+
+
+
+
+
 	
 	}
 
@@ -244,12 +264,14 @@ function addMarkers(){
 
 	function show_close_link()
 	{
-		$("#form_container").append("<div class='close'><a href=''>X</a></div>");
+		$("#form_container").append("<div class='close'><a href='#'>X</a></div>");
 		$(".close").click(function(){
 			$("#shade").remove();
 			$("#form_container").html("");
 		});	
 	}
+
+
 	
 
 

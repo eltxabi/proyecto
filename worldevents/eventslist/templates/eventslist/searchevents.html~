@@ -1,10 +1,78 @@
 	
 	  <form action="{% url 'searchevents' %}" method="post">
 	      {{ form.as_p }}
+	      <div id="distance">1 km</div>
               <p>Select location in the map</p>
               <div id="Location">Location:</div>
               <div id="my_map"></div>
 	      {% csrf_token %} 
 	      <input type="submit" value="search">
 	  </form>
-  	
+  
+<script type="text/javascript">	
+	$( document ).ready(function() {
+	  red_icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+          $("#my_map").width("300px").height("150px").gmap3({
+          map:{
+            options:{
+              center:[46.578498,2.457275],
+              zoom: 10
+            },
+            events:{
+              click: function(map,event){
+                $("#Location").text("Location: Lat: "+event.latLng.lat()+" Lon: "+event.latLng.lng());
+		$("#id_lat").val(event.latLng.lat());
+		$("#id_lng").val(event.latLng.lng());
+		drawMarker(event.latLng.lat(),event.latLng.lng())
+		drawCircle(event.latLng.lat(),event.latLng.lng(),$("#id_distance").val())
+              }
+            }
+          }
+        });
+	
+	//if location already selected
+	if (($("#id_lat").val())&&($("#id_lng").val())){
+		drawMarker($("#id_lat").val(),$("#id_lng").val())	
+	}
+
+	$("#id_distance").change(function(){
+		$("#distance").text($(this).val()+" km")
+		drawCircle($("#id_lat").val(),$("#id_lng").val(),$("#id_distance").val())
+	});
+
+	function drawMarker(lat,lng){
+		$("#my_map").gmap3({
+				clear:{
+					tag:["selected"]
+				},
+				marker:{
+					latLng:[lat,lng],
+					tag:"selected",
+					options:{
+						draggable:true,
+						icon: red_icon
+					}
+				}
+		});
+	}
+
+	function drawCircle(lat,lng,rad){
+		alert(rad)
+		$("#my_map").gmap3({
+				clear:{
+					tag:["circle"]
+				},
+				circle:{
+					tag:"circle",
+					options:{
+						center: [lat, lng],
+      						radius : parseFloat(rad)*1000,
+						fillColor : "red",
+      						strokeColor : "red"
+					}
+				}
+		});
+	}
+
+     });
+</script>

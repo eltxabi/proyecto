@@ -59,7 +59,7 @@ nav ul li a{
 #form_container{
 	position:absolute;
 	top:0;
-	background-color:grey;
+	background-color:white;
 	width:20em;
 	z-index:200;
 	margin-left:auto;

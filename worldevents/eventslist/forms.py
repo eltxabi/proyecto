@@ -18,7 +18,7 @@ class SearchForm(forms.Form):
     category = forms.ChoiceField(label="Category", required=False, widget=forms.Select)
     lat = forms.CharField(required=False,widget=forms.HiddenInput)  
     lng = forms.CharField(required=False,widget=forms.HiddenInput) 
-    distance = forms.CharField(label="Distance",widget=RangeInput(attrs={'min':'1','max':'50','value':'1'}))    
+    distance = forms.CharField(label="Distance",widget=RangeInput(attrs={'min':'1','max':'100','value':'1'}))    
  
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)

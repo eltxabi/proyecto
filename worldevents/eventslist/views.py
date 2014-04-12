@@ -15,10 +15,11 @@ from time import time
 import os
 
 def home(request):
+   '''
    if hasattr(request,'session'):
 	   for s in request.session.iteritems():
 		messages.success(request,s) 
-   
+   '''
    event_list = Event.objects.order_by('added_date')
    form = CommentForm()
    return render(request, "eventslist/home.html", {'event_list':event_list,'form':form,})  
@@ -48,10 +49,25 @@ def searchevents(request):
 	    category=form.cleaned_data['category'] 
 	    lat=form.cleaned_data['lat']
 	    lng=form.cleaned_data['lng'] 
-	    distance=form.cleaned_data['distance'] 
-	    event_list=Event.objects(Q(title__icontains=title) & Q(category=category) & Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)]))
-	    form=SearchForm()
-	    return render(request, "eventslist/home.html", {'event_list':event_list,})  
+	    distance=form.cleaned_data['distance']
+	    
+	    if title and category:
+		event_list=Event.objects(Q(title__icontains=title) & Q(category=category) & Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371]))
+		
+	    elif title and not category:
+		event_list=Event.objects(Q(title__icontains=title) & Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371]))
+
+	    elif not title and category:
+		event_list=Event.objects(Q(category=category) & Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371]))
+
+	    elif not title and not category:
+	        event_list=Event.objects(Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371])) 
+	    
+	    if event_list:
+       	        return render(request, "eventslist/home.html", {'event_list':event_list,})  
+	    else:
+		messages.success(request,'No search results')
+		return HttpResponseRedirect("/")
    else:
 	form = SearchForm()
    return render(request, "eventslist/searchevents.html", {'form':form,})     
@@ -62,7 +78,7 @@ def register(request):
         if form.is_valid():
             User.create_user(form.cleaned_data['username'],form.cleaned_data['password1'])  
 	    messages.success(request, form.cleaned_data['username'] + ' you have been successfully registered')
-            return HttpResponseRedirect("/")
+            return HttpResponseRedirect("/")	
     else:
         form = RegistrationForm()
     return render(request, "eventslist/register.html", {
@@ -156,7 +172,6 @@ def editevent(request,event_id):
 	    event = Event(id=event_id,title=title,description=description,category=category,photo=photo,user=user)		
 	    if (request.FILES):
 		if photo is not None:
-			print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
 			os.remove(settings.MEDIA_ROOT+photo)	
 		photo_name=request.user.username+"-"+str(int(time()))+".jpeg"
 		f=request.FILES["photo"]

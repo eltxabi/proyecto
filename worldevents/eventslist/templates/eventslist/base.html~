@@ -9,9 +9,11 @@
 	{% block javascript %}
 	{% endblock %}
     </head>
-    <body>
+    <body onload="init();">
 	<header>
 		<h1>WorldEvents</h1>
+		{% block user %}
+	 	{% endblock %}
 		<nav>
 			{% block nav %}
 	 		{% endblock %}		

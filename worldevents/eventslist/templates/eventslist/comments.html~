@@ -22,11 +22,12 @@
 $("a[href='comment']").on("click",function(e){
 		e.preventDefault()
 		if ($(this).text()=="Add comment"){
-			alert("aqui")
+			alert($(this).text()+"Clicke")
 			$(this).text("Close")
 			$(".event_detail[style='display: block;'] form").show()
 			
 		}else{
+			alert($(this).text()+"Clickeabajo")
 			$(this).text("Add comment")
 			$(".event_detail[style='display: block;'] form").hide()
 		}
