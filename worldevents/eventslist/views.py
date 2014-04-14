@@ -14,15 +14,29 @@ from django.conf import settings
 from time import time
 import os
 
-def home(request):
+def home(request,num_events='20'):
+   
    '''
    if hasattr(request,'session'):
 	   for s in request.session.iteritems():
-		messages.success(request,s) 
+		messages.success(request,s)
    '''
-   event_list = Event.objects.order_by('added_date')
+
+   if hasattr(request,'session'):
+	   if "search_query" in request.session:
+	   	messages.success(request,request.session["search_query"])
+   
+   if "event_list" not in request.session:
+   	if "search_query" in request.session:
+		event_list=Event.search(request.session['search_query']['title'],request.session['search_query']['category'],request.session['search_query']['lat'],request.session['search_query']['lng'],request.session['search_query']['distance'],int(num_events))
+   	else:
+   		event_list = Event.objects.order_by('-added_date')[int(num_events)-20:int(num_events)]
+   else:
+	event_list=request.session['event_list'] 
+	del request.session['event_list']  
+
    form = CommentForm()
-   return render(request, "eventslist/home.html", {'event_list':event_list,'form':form,})  
+   return render(request, "eventslist/home.html", {'event_list':event_list,'num_events':num_events,'form':form,})  
 
 @login_required
 def addcomment(request):
@@ -43,7 +57,7 @@ def addcomment(request):
 
 def searchevents(request):
    if request.method == 'POST':
-        form = SearchForm(request.POST)
+	form = SearchForm(request.POST)
         if form.is_valid():
             title=form.cleaned_data['title']
 	    category=form.cleaned_data['category'] 
@@ -51,23 +65,16 @@ def searchevents(request):
 	    lng=form.cleaned_data['lng'] 
 	    distance=form.cleaned_data['distance']
 	    
-	    if title and category:
-		event_list=Event.objects(Q(title__icontains=title) & Q(category=category) & Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371]))
-		
-	    elif title and not category:
-		event_list=Event.objects(Q(title__icontains=title) & Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371]))
-
-	    elif not title and category:
-		event_list=Event.objects(Q(category=category) & Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371]))
-
-	    elif not title and not category:
-	        event_list=Event.objects(Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371])) 
+	    event_list=Event.search(title,category,lat,lng,distance,20)
 	    
 	    if event_list:
-       	        return render(request, "eventslist/home.html", {'event_list':event_list,})  
+		request.session["search_query"]={'title':title,'category':category,'lat':lat,'lng':lng,'distance':distance,'num_events':20}
+		request.session["event_list"]=list(event_list)
+		
 	    else:
 		messages.success(request,'No search results')
-		return HttpResponseRedirect("/")
+	    
+	    return HttpResponseRedirect("/")
    else:
 	form = SearchForm()
    return render(request, "eventslist/searchevents.html", {'form':form,})     

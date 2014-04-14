@@ -95,7 +95,7 @@ nav ul li a{
 	
 }
 
-#container table{
+#events_list{
 	background-color: white;
 	display:inline;
 	float:left;
@@ -104,6 +104,26 @@ nav ul li a{
 	border-radius: 0.4em;
 	box-shadow: 0.2em 0.2em 0.5em #888888;
 }
+
+#events_list_control{
+	text-align:center;
+}
+
+#events_list_control p{
+	font-size:3em;
+	display:inline;
+}
+
+#events_list_control p:nth-child(2){
+	background-color:yellow;	
+	margin-left:0.5em;
+	margin-right:0.5em;
+}
+
+#events_list_control p:nth-child(3){
+		
+}
+
 
 #container > ul{
 	margin-left:2%;
