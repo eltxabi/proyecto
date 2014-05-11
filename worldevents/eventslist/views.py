@@ -68,6 +68,7 @@ def searchevents(request):
 	    event_list=Event.search(title,category,lat,lng,distance,20)
 	    
 	    if event_list:
+			
 		request.session["search_query"]={'title':title,'category':category,'lat':lat,'lng':lng,'distance':distance,'num_events':20}
 		request.session["event_list"]=list(event_list)
 		

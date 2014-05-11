@@ -13,6 +13,7 @@ from mongoengine import *
 from django.conf import settings
 from time import time
 import os
+import urllib
 
 def home(request,num_events='20'):
    
@@ -21,6 +22,10 @@ def home(request,num_events='20'):
 	   for s in request.session.iteritems():
 		messages.success(request,s)
    '''
+
+   if hasattr(request,'session'):
+	   if "search_query" in request.session:
+	   	messages.success(request,request.session["search_query"])
    
    if "event_list" not in request.session:
    	if "search_query" in request.session:
@@ -64,9 +69,12 @@ def searchevents(request):
 	    event_list=Event.search(title,category,lat,lng,distance,20)
 	    
 	    if event_list:
-		request.session["search_query"]={'title':title,'category':category,'lat':lat,'lng':lng,'distance':distance,'num_events':20}
-		request.session["event_list"]=list(event_list)
+		search_query=urllib.urlencode({'title':title,'category':category,'lat':lat,'lng':lng,'distance':distance,'num_events':20})
+		return render(request, "eventslist/eventslist.html", {'event_list':event_list,'search_query':search_query,}) 
+		'''	
 		
+		request.session["event_list"]=list(event_list)
+		'''
 	    else:
 		messages.success(request,'No search results')
 	    
