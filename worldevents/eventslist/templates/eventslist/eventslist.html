@@ -1,21 +1,28 @@
 {% load staticfiles %}
 <div id="events_list">	
 		<table>
-		{% for event in event_list%}
+		{% for event in events_list%}
 			<tr>
 				<td style="display:none;">{{ event.id }}</td>	
 				<td style="display:none;">{{ event.location }}</td>				
 				<td>{{ event.title }}</td>
 				<td>{{ event.category }}</td>
+				<td>&gt;</td>
 			</tr>
 		{% endfor %}
 		</table>
 		<div id="events_list_control">
-			{% with event_list|length as events %} 
+			{% with events_list|length as events %} 
 			{% if num_events == '20' %}
 			<p>&lt;</p>
 			{% else %}
-			<p><a href="{% url 'eventslist.views.home' %}{{ num_events|add:'-20' }}">&lt;</a></p>	
+			
+			{% if search_query %}
+				<p><a href="{% url 'eventslist.views.searchevents' %}/{{ num_events|add:'-20' }}/?{{search_query}}">&lt;</a></p>
+			{% else%}
+				<p><a href="{% url 'eventslist.views.searchevents' %}/{{ num_events|add:'-20' }}">&lt;</a></p>			
+			{% endif%}
+				
 			{% endif %}
 			
 			<p>{{ num_events|add:'-19' }}-{{ num_events|add:'-20'|add:events }}</p>
@@ -23,14 +30,20 @@
 			{% if events < 20 %}
 			<p>&gt;</p>	
 			{% else %}
-			<p><a href="{% url 'eventslist.views.home' %}{{ num_events|add:'20' }}">&gt;</a></p>
+			{% if search_query %}
+				<p><a href="{% url 'eventslist.views.searchevents' %}/{{ num_events|add:'20' }}/?{{search_query}}">&gt;</a></p>
+			{% else%}
+				<p><a href="{% url 'eventslist.views.searchevents' %}/{{ num_events|add:'20' }}">&gt;</a></p>			
+			{% endif%}
 			{% endif %}
 			{% endwith %}
 			
 		</div>
 		</div>
-
-		{% for event in event_list%}
+		<div id="togglemapdetail">
+				<a href='#'>map/detail</a>
+		</div>
+		{% for event in events_list%}
 		<ul class="event_detail" id="{{ event.id }}">
 			<li>{{ event.title }}</li>
 			<li>{{ event.description }}</li>
@@ -45,5 +58,26 @@
 			<div class="comments">
 			{% include "eventslist/comments.html" %}
 			</div>
+			
 		</ul>
 		{% endfor %}
+
+
+
+
+<script type="text/javascript">
+	$("#togglemapdetail a").click(function(){
+		$("#map_detail").toggle()
+		lat=$(".selected_event").find("td:eq(1)").html().substring($(".selected_event").find("td:eq(1)").html().indexOf("[")+1,$(".selected_event").find("td:eq(1)").html().lastIndexOf(","))
+		lng=$(".selected_event").find("td:eq(1)").html().substring($(".selected_event").find("td:eq(1)").html().lastIndexOf(",")+1,$(".selected_event").find("td:eq(1)").html().indexOf("]"))
+		
+		$("#map_detail").gmap3({trigger:"resize"});
+		$("#map_detail").gmap3("get").setCenter(new google.maps.LatLng(lat,lng))
+		
+		
+		id=($(".selected_event").find("td:first").html())
+		$("#"+id).toggle()
+		
+	});
+</script>
+

@@ -13,8 +13,9 @@ from mongoengine import *
 from django.conf import settings
 from time import time
 import os
+import urllib
 
-def home(request,num_events='20'):
+def home(request):
    
    '''
    if hasattr(request,'session'):
@@ -22,21 +23,9 @@ def home(request,num_events='20'):
 		messages.success(request,s)
    '''
 
-   if hasattr(request,'session'):
-	   if "search_query" in request.session:
-	   	messages.success(request,request.session["search_query"])
-   
-   if "event_list" not in request.session:
-   	if "search_query" in request.session:
-		event_list=Event.search(request.session['search_query']['title'],request.session['search_query']['category'],request.session['search_query']['lat'],request.session['search_query']['lng'],request.session['search_query']['distance'],int(num_events))
-   	else:
-   		event_list = Event.objects.order_by('-added_date')[int(num_events)-20:int(num_events)]
-   else:
-	event_list=request.session['event_list'] 
-	del request.session['event_list']  
-
+   events_list = Event.objects.order_by('-added_date')[0:20]
    form = CommentForm()
-   return render(request, "eventslist/home.html", {'event_list':event_list,'num_events':num_events,'form':form,})  
+   return render(request, "eventslist/home.html", {'events_list':events_list,'num_events':'20','form':form,})  
 
 @login_required
 def addcomment(request):
@@ -55,7 +44,7 @@ def addcomment(request):
    event=Event.objects.get(id=event_id) 
    return render(request, "eventslist/comments.html", {'form':form,'event':event}) 
 
-def searchevents(request):
+def searchevents(request,num_events=0):
    if request.method == 'POST':
 	form = SearchForm(request.POST)
         if form.is_valid():
@@ -65,20 +54,38 @@ def searchevents(request):
 	    lng=form.cleaned_data['lng'] 
 	    distance=form.cleaned_data['distance']
 	    
-	    event_list=Event.search(title,category,lat,lng,distance,20)
+	    events_list=Event.search(title,category,lat,lng,distance,20)
 	    
-	    if event_list:
-			
-		request.session["search_query"]={'title':title,'category':category,'lat':lat,'lng':lng,'distance':distance,'num_events':20}
-		request.session["event_list"]=list(event_list)
-		
+	    if events_list:
+		search_query=urllib.urlencode( {'title':title,'category':category,'lat':lat,'lng':lng,'distance':distance,'num_events':20} )
 	    else:
 		messages.success(request,'No search results')
 	    
-	    return HttpResponseRedirect("/")
-   else:
+	    return render(request, "eventslist/eventslist.html", {'events_list':events_list,'search_query':search_query,'num_events':20}) 
+	else:
+	    print("formulario invalido")
+	    return render(request, "eventslist/searchevents.html", {'form':form,})  
+   elif(num_events==0):
 	form = SearchForm()
-   return render(request, "eventslist/searchevents.html", {'form':form,})     
+   	return render(request, "eventslist/searchevents.html", {'form':form,})     
+   elif request.META['QUERY_STRING']:
+	title=request.GET['title']
+        category=request.GET['category'] 
+	lat=request.GET['lat']
+	lng=request.GET['lng'] 
+	distance=request.GET['distance']
+	events_list=Event.search(title,category,lat,lng,distance,int(num_events))
+	
+	if events_list:
+		search_query=urllib.urlencode( {'title':title,'category':category,'lat':lat,'lng':lng,'distance':distance,'num_events':20} )
+	else:
+		messages.success(request,'No search results')
+	    
+	return render(request, "eventslist/eventslist.html", {'events_list':events_list,'search_query':search_query,'num_events':num_events}) 
+	
+   else:
+	events_list = Event.objects.order_by('-added_date')[int(num_events)-20:int(num_events)]
+	return render(request, "eventslist/eventslist.html", {'events_list':events_list,'num_events':num_events}) 
   
 def register(request):
     if request.method == 'POST':

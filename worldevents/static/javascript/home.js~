@@ -25,7 +25,9 @@ function init() {
 	
 	//change event detail
 	changeEvent()
-
+	
+	//process search links	
+	process_search_links()
 	}
 
 function first_lng(){
@@ -37,23 +39,28 @@ return $("tr:first").find("td:eq(1)").html().substring($("tr:first").find("td:eq
 }
 
 function create_map_detail(lat,lng){
-$("#map_detail").gmap3({
-          map:{
-            options:{
-              center:[lat,lng],
-              zoom: 8
-            }
-          }
-        });
+	if (!$('#map_detail').html().trim()){
+		$("#map_detail").gmap3({
+			  map:{
+			    options:{
+			      center:[lat,lng],
+			      zoom: 8
+			    }
+			  }
+			});
+	}
 }
 
 function set_first_event(){
-$("tr:first").addClass("selected_event")
-	id=($(".selected_event").find("td:first").html())
-	$("#"+id).toggle()
+	$("tr:first").addClass("selected_event")
+	if (($("td:nth-child(5)")).css("display")=='none'){
+		id=($(".selected_event").find("td:first").html())
+		$("#"+id).toggle()
+	}
 }
 
 function toggle_comments_form(){
+$("a[href='comment']").unbind("click")
 $("a[href='comment']").on("click",function(e){
 		e.preventDefault()
 		if ($(this).text()=="Add comment"){
@@ -68,8 +75,24 @@ $("a[href='comment']").on("click",function(e){
 	});
 }
 
+function process_search_links(){
+$("a[href*='searchevents/']").unbind("click")
+//Solo selecciono los enlaces de navegación de la lista, no el enlace del formulario de busqueda(/)
+$("a[href*='searchevents/']").on("click",function(e){
+		e.preventDefault()
+		$.get( $(this).attr("href"), function( data ) {
+			$("#events_list").remove()
+			$(".event_detail").remove()
+			$("#container").prepend(data)
+			init()
+		});	
+		
+		
+	});
+}
 
 function show_form(){
+$(".form").unbind("click")
 $(".form").on("click",function(e){
 		e.preventDefault()
 		$("#form_container").load($(this).attr("href"),function(){
@@ -81,6 +104,7 @@ $(".form").on("click",function(e){
 }
 
 function process_comment_form(){
+	$("ul.event_detail").unbind("submit")
 	$("ul.event_detail").on("submit","form",function(e){
 		e.preventDefault();
 		var postData = new FormData()
@@ -112,6 +136,7 @@ function process_comment_form(){
 
 
 function process_event_form(){
+	$("#form_container").unbind("submit")
 	$("#form_container").on("submit","form",function(e){
 		e.preventDefault();
 		//var postData = $(this).serializeArray();
@@ -141,10 +166,11 @@ function process_event_form(){
 					
 				}else if (data.indexOf('<div id="events_list">')!=-1){
 					$("#events_list").remove()
+					$(".event_detail").remove()
 					$("#container").prepend(data)
 					$("#shade").remove();
-					$("#form_container").html("");	
-					
+					$("#form_container").html("");
+					process_search_links()	
 				}else{
 					$("#form_container").html(data);
 					show_close_link()
@@ -168,12 +194,17 @@ function changeEvent(){
 		
 		$("a[href='comment']").text("Add comment")
 		$("#"+id+" form").hide()
-
-		$("#"+id).toggle()
+		hidden=false
+		if ($("#"+id).css('display') == 'none'){
+			hidden=true
+		}
+		$("#"+id).hide()
 		$(".selected_event").removeClass("selected_event")
 		$(this).addClass("selected_event")
 		id=($(this).find("td:first").html())
-		$("#"+id).toggle()
+		if (!hidden){
+			$("#"+id).show()
+		}
 		lat=$(this).find("td:eq(1)").html().substring($(this).find("td:eq(1)").html().indexOf("[")+1,$(this).find("td:eq(1)").html().lastIndexOf(","))
 		lng=$(this).find("td:eq(1)").html().substring($(this).find("td:eq(1)").html().lastIndexOf(",")+1,$(this).find("td:eq(1)").html().indexOf("]"))
 		map.gmap3({clear:{tag:[id]}});
@@ -185,6 +216,7 @@ function changeEvent(){
 
 function addMarkers(){
 		map=$("#map_detail")
+		map.gmap3({clear:{name:"marker"}});
 		$("tr").each(function(){
 			
 			lat=$(this).find("td:eq(1)").html().substring($(this).find("td:eq(1)").html().indexOf("[")+1,$(this).find("td:eq(1)").html().lastIndexOf(","))
@@ -215,8 +247,7 @@ function addMarkers(){
 	}
 
 	function show_form_container()
-	{	
-		$("body").append("<div id='shade'></div>")
+	{	$("body").append("<div id='shade'></div>")
 		$("#form_container").css("display","block")
 		show_close_link()
 		$("input[value='Cancel']").click(function(){

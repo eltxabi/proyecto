@@ -204,7 +204,7 @@ nav ul li a{
 
 
 #map_detail{
-	display:inline;
+	
 	float:left;
 	margin:0.3em;
 	padding: 0.1em;
@@ -218,6 +218,79 @@ nav ul li a{
 #form_container img{
 	width:70%;
 }
+
+@media screen and (min-width: 1150px){
+
+#togglemapdetail{
+	display:none;
+}
+
+#map_detail{
+	display:block;
+		
+}
+
+td:nth-child(5){
+	display:none;
+}
+
+#container>ul{
+	
+	
+}
+
+}
+
+@media screen and (min-width: 780px) and (max-width: 1149px){
+#togglemapdetail{
+	display:block;
+	
+}
+
+#map_detail{
+	display:none;
+	width:60%;	
+}
+
+td:nth-child(5){
+	display:none;
+}
+
+#container>ul{
+	
+	width:60%;
+}
+
+}
+
+@media screen and (max-width: 779px){
+#togglemapdetail{
+	display:none;
+	
+}
+
+/*Enlace para mostrar map/detail en pantallas pequeñas*/
+td:nth-child(5){
+	
+}
+
+#map_detail{
+	
+	width:90%;	
+}
+
+#container>ul{
+	
+	width:100%;
+}
+
+}
+
+
+
+
+
+
 
 
 

@@ -54,15 +54,8 @@
 
 {% endblock %}
 {% block scripts %}
- <script type="text/javascript">
+<script type="text/javascript">
 	$( document ).ready(init());
-
-	
-
-	
-
-
-
 </script>
 {% endblock %}
 
