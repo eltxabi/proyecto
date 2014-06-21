@@ -8,12 +8,12 @@ class NewVisitorTest(unittest.TestCase):
 
    def setUp(self):
       self.browser = webdriver.Firefox()
-      self.browser.implicitly_wait(3)
+      self.browser.implicitly_wait(10)
       
    def tearDown(self):  
       self.browser.quit()
       #self.remove_user('mary')
-
+   
    def test_can_login(self):
       # Adding user mary   
       self.add_user('mary','mary')	
@@ -46,7 +46,7 @@ class NewVisitorTest(unittest.TestCase):
       
       # Removing user mary   
       self.remove_user('mary')
-
+   
    def test_can_register(self):
       # Check out homepage
       self.browser.get('http://localhost:8000')
@@ -79,7 +79,7 @@ class NewVisitorTest(unittest.TestCase):
       # Removing user john 
       self.remove_user('john')	 	
 
-
+   '''
    def test_see_main_page(self):  
       # Check out homepage
       self.browser.get('http://localhost:8000')
@@ -169,7 +169,7 @@ class NewVisitorTest(unittest.TestCase):
       
       self.remove_event('Prueba')
       
-
+   '''
    def add_event(self):
       con = Connection()	
       db = con['worldevents']
@@ -213,7 +213,7 @@ class NewVisitorTest(unittest.TestCase):
       username_input.send_keys('mary')
       password_input.send_keys('mary') 
       password_input.send_keys(Keys.ENTER)  
-           
+              
     
 if __name__ == '__main__':  
     unittest.main()       

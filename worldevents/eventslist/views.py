@@ -83,9 +83,10 @@ def searchevents(request):
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-        if form.is_valid():
-            User.create_user(form.cleaned_data['username'],form.cleaned_data['password1'])  
+	if form.is_valid():
+	    User.create_user(form.cleaned_data['username'],form.cleaned_data['password1'])  
 	    messages.success(request, form.cleaned_data['username'] + ' you have been successfully registered')
+	    print 'valido'
             return HttpResponseRedirect("/")	
     else:
         form = RegistrationForm()
@@ -116,6 +117,7 @@ def loginpage(request):
         'form': form,
     })  
 
+@login_required
 def logoutpage(request):
    logout(request)
    return HttpResponseRedirect("/")
@@ -156,7 +158,8 @@ def addevent(request):
 def deleteevent(request,event_id):
     if request.method == 'POST':
 	event=Event.objects(id=event_id)[0]
-	os.remove(settings.MEDIA_ROOT+event.photo)
+	if event.photo is not None:
+		os.remove(settings.MEDIA_ROOT+event.photo)
 	event.delete()
 	return HttpResponseRedirect("/")
     
@@ -168,9 +171,8 @@ def deleteevent(request,event_id):
 def editevent(request,event_id):
     if request.method == 'POST':
 	form = EventForm(request.POST, request.FILES)
-	
 	if form.is_valid():
-            title=form.cleaned_data['title']
+	    title=form.cleaned_data['title']
 	    description=form.cleaned_data['description']
             category=form.cleaned_data['category'] 
 	    photo=Event.objects(id=event_id)[0].photo
@@ -201,6 +203,6 @@ def editevent(request,event_id):
 	form.fields["lng"].initial = event.location['coordinates'][1]
 	      
     return render(request,'eventslist/editevent.html', {
-        'form': form, 'photo': event.photo, 'id': event_id,
+        'form': form, 'photo': Event.objects(id=event_id)[0].photo, 'id': event_id,
     }) 
 

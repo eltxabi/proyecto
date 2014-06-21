@@ -7,22 +7,30 @@ body{
 }
 
 header{
-	background-color:#A1FED1;
+	background-color:white;
+	padding: 1em;
 	
 }
 
 h1{
-	display: inline;
+	display: inline-block;
+	padding: 0.5em;
+	font-family: 'Sonsie One', cursive;
+	font-size: 2em;
+	color: red;
+	text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.47);
+	
 }
 
 h2{
 	display: inline;
-	margin-left:0.5em;
-	
+	margin-left:0.3em;
+	float: right;
 }
 
 nav{
-	display: inline;	
+	display: inline;
+	margin-left: 3em;
 }
 
 nav ul{

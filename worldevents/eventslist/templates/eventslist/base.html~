@@ -9,15 +9,15 @@
 	{% block javascript %}
 	{% endblock %}
     </head>
-    <body onload="init();">
+    <body>
 	<header>
 		<h1>WorldEvents</h1>
-		{% block user %}
-	 	{% endblock %}
 		<nav>
 			{% block nav %}
 	 		{% endblock %}		
 		</nav>
+		{% block user %}
+	 	{% endblock %}
 	</header>
 	<div id='messages'>
 		{% if messages %}
