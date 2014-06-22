@@ -25,6 +25,9 @@ function init() {
 	
 	//change event detail
 	changeEvent()
+	
+	//delete messages
+	delete_messages()
 
 	}
 
@@ -139,12 +142,6 @@ function process_event_form(){
 					document.write(data)
 					document.close()
 					
-				}else if (data.indexOf('<div id="events_list">')!=-1){
-					$("#events_list").remove()
-					$("#container").prepend(data)
-					$("#shade").remove();
-					$("#form_container").html("");	
-					
 				}else{
 					$("#form_container").html(data);
 					show_close_link()
@@ -182,6 +179,13 @@ function changeEvent(){
 	});
 }
 
+
+function delete_messages(){
+	$("#messages").fadeOut(1600, "linear",function(){
+		$(".messages").remove()
+	});
+
+}
 
 function addMarkers(){
 		map=$("#map_detail")

@@ -3,6 +3,9 @@
 {% block stylesheets %}
 	<link rel="stylesheet" type="text/css" href={% static "css/base.css" %} >
 	<link href='http://fonts.googleapis.com/css?family=Sonsie+One' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Merriweather:400,300,400italic' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Pompiere' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Aladin' rel='stylesheet' type='text/css'>
 {% endblock %}
 {% block javascript %}
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
@@ -11,11 +14,7 @@
 	<script type="text/javascript" src={% static "javascript/home.js" %}></script>
 
 {% endblock %}
-{% block user %}
-	{% if user.is_authenticated %}	
-		<h2>{{user.username}}</h2>
-	{% endif %}
-{% endblock %}
+
 {% block nav %}
 <ul>
 {% if user.is_authenticated %}	

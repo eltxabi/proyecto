@@ -57,7 +57,6 @@
 	}
 
 	function drawCircle(lat,lng,rad){
-		alert(rad)
 		$("#my_map").gmap3({
 				clear:{
 					tag:["circle"]

@@ -64,6 +64,9 @@ AUTHENTICATION_BACKENDS = (
     'mongoengine.django.auth.MongoEngineBackend',
 )
 
+#Events per page
+PAGE_SIZE = 15
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
@@ -85,7 +88,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
-MEDIA_ROOT=os.path.join(BASE_DIR, "static/media")
+MEDIA_ROOT=os.path.join(BASE_DIR, "static/media/")
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases

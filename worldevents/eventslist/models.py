@@ -30,16 +30,16 @@ class Event(Document):
    @queryset_manager
    def search(doc_cls, queryset,title,category,lat,lng,distance,num_events):
       	    if title and category:
-		return queryset(Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371]) & Q(title__icontains=title) & Q(category=category)).order_by('-added_date')[num_events-20:num_events]
+		return queryset(Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371]) & Q(title__icontains=title) & Q(category=category)).order_by('-added_date')[num_events-15:num_events]
 		
 	    elif title and not category:
-		return queryset(Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371]) & Q(title__icontains=title)).order_by('-added_date')[num_events-20:num_events]
+		return queryset(Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371]) & Q(title__icontains=title)).order_by('-added_date')[num_events-15:num_events]
 
 	    elif not title and category:
-		return queryset(Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371]) & Q(category=category)).order_by('-added_date')[num_events-20:num_events]
+		return queryset(Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371]) & Q(category=category)).order_by('-added_date')[num_events-15:num_events]
 
 	    elif not title and not category:
-	       return queryset(Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371])).order_by('-added_date')[num_events-20:num_events] 
+	       return queryset(Q(location__geo_within_sphere=[(float(lat),float(lng)),float(distance)/6371])).order_by('-added_date')[num_events-15:num_events] 
         
       
    def __str__(self):

@@ -12,18 +12,18 @@
 		</table>
 		<div id="events_list_control">
 			{% with event_list|length as events %} 
-			{% if num_events == '20' %}
+			{% if num_events == '15' %}
 			<p>&lt;</p>
 			{% else %}
-			<p><a href="{% url 'eventslist.views.home' %}{{ num_events|add:'-20' }}">&lt;</a></p>	
+			<p><a href="{% url 'eventslist.views.home' %}{{ num_events|add:'-15' }}">&lt;</a></p>	
 			{% endif %}
 			
-			<p>{{ num_events|add:'-19' }}-{{ num_events|add:'-20'|add:events }}</p>
+			<p>{{ num_events|add:'-14' }}-{{ num_events|add:'-15'|add:events }}</p>
 			
-			{% if events < 20 %}
+			{% if events < 15 %}
 			<p>&gt;</p>	
 			{% else %}
-			<p><a href="{% url 'eventslist.views.home' %}{{ num_events|add:'20' }}">&gt;</a></p>
+			<p><a href="{% url 'eventslist.views.home' %}{{ num_events|add:'15' }}">&gt;</a></p>
 			{% endif %}
 			{% endwith %}
 			

@@ -8,13 +8,13 @@ body{
 
 header{
 	background-color:white;
-	padding: 1em;
+	padding: 0.4em;
 	
 }
 
 h1{
 	display: inline;
-	padding: 0.5em;
+	padding: 0.3em;
 	font-family: 'Sonsie One', cursive;
 	font-size: 2em;
 	color: red;
@@ -30,7 +30,7 @@ h2{
 
 nav{
 	display: inline;
-	margin-left: 3em;
+	
 }
 
 nav ul{
@@ -41,26 +41,57 @@ nav ul{
 
 nav ul li{
 	display: inline;
-	padding-left: 0.5em;
-	border-left: solid 0.5em;
-	font-size: 2em;
+	
 }
 
 nav ul li a{
 	text-decoration: none;
+	padding-top: 0.3em;
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+	font-size: 2em;
+	font-family: 'Aladin', cursive;
+	color: #848484;
+	
+	border-radius: 0.4em;
+	
 }
+
+nav ul li a:hover
+{
+	background:red;
+	color: white
+} 
+
+
 
 .event_detail{
 	display:none;
 }
 
 #messages{
-	
+	display: inline;
+	float: right;
+	background-color: red;
+	color: white;
+	width: 30%;
+	font-size: 1.5em;
+	margin-top:0.4em;
+}
+
+#messages ul{
+	display: inline;	
+}
+
+#messages ul li{
+	display: inline;	
 }
 
 
 .selected_event{
 	background-color:red;
+	color: white;
+		
 }
 
 
@@ -95,35 +126,56 @@ nav ul li a{
 	color: white;
 }
 
-.comments form{
-	display:none;
-}
 
 #container{
 	
 }
 
 #events_list{
+	width: 20%;
 	background-color: white;
 	display:inline;
 	float:left;
 	margin:0.3em;
-	padding: 0.1em;
+	margin-right:2em;
 	border-radius: 0.4em;
 	box-shadow: 0.2em 0.2em 0.5em #888888;
+	font-family: 'Pompiere', cursive;
+	font-size: 1.6em;
+}
+
+#events_list table{
+	
+	margin-left: auto;
+	margin-right: auto;
+		
+}
+
+#events_list table tr td{
+	border: solid grey 0.1em; 
+	border-radius: 0.8;
 }
 
 #events_list_control{
 	text-align:center;
+	border-top: solid 0.1em;
+	background-color:red;
+	color: white;
 }
 
 #events_list_control p{
-	font-size:3em;
+	font-size:1.7em;
+	font-family: 'Aladin', cursive;
 	display:inline;
+	text-decoration: none;
+}
+
+#events_list_control p a{
+	color: white;
+	text-decoration: none;
 }
 
 #events_list_control p:nth-child(2){
-	background-color:yellow;	
 	margin-left:0.5em;
 	margin-right:0.5em;
 }
@@ -134,12 +186,11 @@ nav ul li a{
 
 
 #container > ul{
-	margin-left:2%;
-	margin-right:2%;
-	width:30%;
+	width:40%;
 }
 
 #container ul[style*="display: block"] {
+	position: relative;
 	background-color: white;
 	display:inline;
 	float:left;
@@ -158,34 +209,68 @@ nav ul li a{
 }
 
 #container ul[style*="display: block"] > li:first-child{
-	font-size:2em;
+	font-family: 'Pompiere', cursive;
+	font-size: 2.5em;
 	text-align:center;
 }
 
 #container ul[style*="display: block"] > li:nth-child(2){
-	font-size:1.5em;
+	font-size:1.7em;
 	color: grey;
+	border-top: solid 0.1em;
+	border-bottom: solid 0.1em;	
 }
 
 #container ul[style*="display: block"] > li:nth-child(3){
 	font-size:1em;
-	background-color:blue;
+	background-color:red;
 	color:white;
 	display:inline;
 	border-radius: 0.4em;
 	padding: 0.2em;
+	position:absolute;
+	top:0.5em;
+	right:0.5em;
 }
 
 #container ul[style*="display: block"] > li:nth-child(4){
 	text-align:center;
+	border-bottom: solid 0.1em;
+	margin-bottom: 1em;
+		
 }
 
 #container ul[style*="display: block"] img{
 	width:70%;
 }
 
+#container ul[style*="display: block"] > a{
+	text-align:center;
+	text-decoration: none;
+	margin-left: 0.2em;
+	padding-top: 0.3em;
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+	font-size: 2em;
+	font-family: 'Aladin', cursive;
+	color: #848484;
+	
+	border-radius: 0.4em;
+}
+
+#container ul[style*="display: block"] a:hover
+{
+	background:red;
+	color: white
+}
+
 .comments{
-	margin-top:0.7em;
+	margin-top: 0.6em;
+	border-top: solid 0.1em;
+}
+
+.comments form{
+	display:none;
 }
 
 .comments ul{
@@ -201,7 +286,14 @@ nav ul li a{
 }
 
 .comments ul li p:first-child{
-	font-size:2em; 
+	font-size: 2em;
+	font-family: 'Pompiere', cursive;
+	color: grey;
+}
+
+.comments ul li p:nth-child(2){
+	font-size: 1.5em;
+	font-family: 'Pompiere', cursive;
 }
 
 #container ul[style*="display: block"] a{
@@ -213,7 +305,7 @@ nav ul li a{
 
 #map_detail{
 	display:inline;
-	float:left;
+	float:right;
 	margin:0.3em;
 	padding: 0.1em;
 	border-radius: 0.4em;

@@ -14,23 +14,17 @@ from django.conf import settings
 from time import time
 import os
 
-def home(request,num_events='20'):
-   
+def home(request,num_events='15'):
    '''
-   if hasattr(request,'session'):
-	   for s in request.session.iteritems():
-		messages.success(request,s)
-   '''
-
    if hasattr(request,'session'):
 	   if "search_query" in request.session:
 	   	messages.success(request,request.session["search_query"])
-   
+   '''
    if "event_list" not in request.session:
    	if "search_query" in request.session:
 		event_list=Event.search(request.session['search_query']['title'],request.session['search_query']['category'],request.session['search_query']['lat'],request.session['search_query']['lng'],request.session['search_query']['distance'],int(num_events))
    	else:
-   		event_list = Event.objects.order_by('-added_date')[int(num_events)-20:int(num_events)]
+   		event_list = Event.objects.order_by('-added_date')[int(num_events)-15:int(num_events)]
    else:
 	event_list=request.session['event_list'] 
 	del request.session['event_list']  
@@ -65,11 +59,11 @@ def searchevents(request):
 	    lng=form.cleaned_data['lng'] 
 	    distance=form.cleaned_data['distance']
 	    
-	    event_list=Event.search(title,category,lat,lng,distance,20)
+	    event_list=Event.search(title,category,lat,lng,distance,15)
 	    
 	    if event_list:
 			
-		request.session["search_query"]={'title':title,'category':category,'lat':lat,'lng':lng,'distance':distance,'num_events':20}
+		request.session["search_query"]={'title':title,'category':category,'lat':lat,'lng':lng,'distance':distance,'num_events':15}
 		request.session["event_list"]=list(event_list)
 		
 	    else:

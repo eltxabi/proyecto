@@ -25,6 +25,9 @@ function init() {
 	
 	//change event detail
 	changeEvent()
+	
+	//delete messages
+	delete_messages()
 
 	}
 
@@ -176,6 +179,13 @@ function changeEvent(){
 	});
 }
 
+
+function delete_messages(){
+	$("#messages").fadeOut(5000, "linear",function(){
+		$(".messages").remove()
+	});
+
+}
 
 function addMarkers(){
 		map=$("#map_detail")
