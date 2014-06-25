@@ -80,8 +80,7 @@ def register(request):
 	if form.is_valid():
 	    User.create_user(form.cleaned_data['username'],form.cleaned_data['password1'])  
 	    messages.success(request, form.cleaned_data['username'] + ' you have been successfully registered')
-	    print 'valido'
-            return HttpResponseRedirect("/")	
+	    return HttpResponseRedirect("/")	
     else:
         form = RegistrationForm()
     return render(request, "eventslist/register.html", {

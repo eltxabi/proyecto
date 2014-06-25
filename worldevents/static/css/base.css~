@@ -127,17 +127,15 @@ nav ul li a:hover
 }
 
 
+
 #container{
 	
 }
 
 #events_list{
-	width: 20%;
+	
 	background-color: white;
-	display:inline;
-	float:left;
-	margin:0.3em;
-	margin-right:2em;
+	
 	border-radius: 0.4em;
 	box-shadow: 0.2em 0.2em 0.5em #888888;
 	font-family: 'Pompiere', cursive;
@@ -153,7 +151,6 @@ nav ul li a:hover
 
 #events_list table tr td{
 	border: solid grey 0.1em; 
-	border-radius: 0.8;
 }
 
 #events_list_control{
@@ -185,17 +182,15 @@ nav ul li a:hover
 }
 
 
+
 #container > ul{
-	width:40%;
+	
 }
 
 #container ul[style*="display: block"] {
-	position: relative;
+	
 	background-color: white;
-	display:inline;
-	float:left;
-	margin:0.3em;
-	padding: 0.1em;
+	
 	border-radius: 0.4em;
 	box-shadow: 0.2em 0.2em 0.5em #888888;
 }
@@ -264,6 +259,7 @@ nav ul li a:hover
 	color: white
 }
 
+
 .comments{
 	margin-top: 0.6em;
 	border-top: solid 0.1em;
@@ -304,14 +300,10 @@ nav ul li a:hover
 
 
 #map_detail{
-	display:inline;
-	float:right;
-	margin:0.3em;
-	padding: 0.1em;
+
 	border-radius: 0.4em;
 	box-shadow: 0.2em 0.2em 0.5em #888888;
-	width: 30%;
-	height: 300px;
+	
 
 }
 
@@ -319,7 +311,126 @@ nav ul li a:hover
 	width:70%;
 }
 
+@media screen and (min-width: 1150px){
+#events_list{
+	width: 20%;
+	display:inline;
+	float:left;
+	margin:0.3em;
+	margin-right:2em;
+}
+
+#container > ul{
+	width:40%;
+}
+
+#container ul[style*="display: block"] {
+	position: relative;
+	display:inline;
+	float:left;
+	margin:0.3em;
+	padding: 0.1em;
+}
+
+#map_detail{
+	display:inline;
+	float:right;
+	margin:0.3em;
+	padding: 0.1em;
+	width: 30%;
+	height: 300px;
+}
+
+#toggle_map_detail{
+	display: none;	
+}
+
+#back_to_list{
+	display: none;
+}
+
+}
+
+@media screen and (min-width: 780px) and (max-width: 1149px){
+
+#events_list{
+	width: 40%;
+	display:inline;
+	float:left;
+	margin:0.3em;
+	margin-right:2em;
+}
+
+#container > ul{
+	width:50%;
+}
+
+#container ul[style*="display: block"] {
+	position: relative;
+	display:inline;
+	float:left;
+	margin:0.3em;
+	padding: 0.1em;
+	overflow: hidden;
+}
 
 
+#map_detail{
+	display:inline;
+	float:left;
+	padding: 0.1em;
+	width: 1px;
+	height: 1px;
+}
+
+
+
+#toggle_map_detail{
+		
+}
+
+#back_to_list{
+	display: none;
+}
+
+
+}
+
+@media screen and (max-width: 769px){
+#events_list{
+	width: 100%;
+	display:inline;
+	float:left;
+	margin: auto;
+	
+}
+
+#container > ul{
+	width:1px;
+	height:1px;
+}
+
+#container ul[style*="display: block"] {
+	position: relative;
+	display:inline;
+	float:left;
+	margin:0.3em;
+	padding: 0.1em;
+	overflow: hidden;
+}
+
+
+#map_detail{
+	display:inline;
+	float:left;
+	padding: 0.1em;
+	width: 1px;
+	height: 1px;
+}
+
+#toggle_map_detail{
+	display: none;	
+}
+}
 
 

@@ -14,11 +14,7 @@
 	<script type="text/javascript" src={% static "javascript/home.js" %}></script>
 
 {% endblock %}
-{% block user %}
-	{% if user.is_authenticated %}	
-		<h2>{{user.username}}</h2>
-	{% endif %}
-{% endblock %}
+
 {% block nav %}
 <ul>
 {% if user.is_authenticated %}	
@@ -48,7 +44,9 @@
 	<div id="container">
 	{% if event_list %}
 		{% include "eventslist/eventslist.html" %}
-		<div id="map_detail"></div>
+		<div id="map_detail">
+			<a href="detail">Detail</a>
+		</div>
 	{% endif %}
 	<div>
 	<div id="form_container">

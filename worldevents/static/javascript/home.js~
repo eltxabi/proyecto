@@ -29,6 +29,11 @@ function init() {
 	//delete messages
 	delete_messages()
 
+	//toggle map/detail link
+	toggle_map_detail()
+
+	//back to list link
+	back_to_list()
 	}
 
 function first_lng(){
@@ -176,15 +181,72 @@ function changeEvent(){
 		map.gmap3({clear:{tag:[id]}});
 		addMarker(map,id,red_icon,lat,lng)
 		map.gmap3("get").setCenter(new google.maps.LatLng(lat,lng))
+
+		if ($(window).width()<800){
+			$("#events_list").css("width","0px")
+			$("#events_list").css("height","0px")
+			$("#events_list").css("overflow","hidden")
+			$(".event_detail").css("width","100%")
+			$(".event_detail").css("height","auto")
+			$("#toggle_map_detail").css("display","block")
+			$("#back_to_list").css("display","block")
+		}
+
 	});
 }
 
 
 function delete_messages(){
-	$("#messages").fadeOut(1600, "linear",function(){
+	$("#messages").fadeOut(5000, "linear",function(){
 		$(".messages").remove()
 	});
 
+}
+
+
+
+function toggle_map_detail(){
+	$("#toggle_map_detail").click(function(){
+		detail=$(".event_detail")
+		map=$("#map_detail")
+		if ($(window).width()<800){
+			width="100%"
+		}else{
+			width="50%"
+		}
+		if (detail.width()<=1){
+			detail.css("width",width)
+			detail.css("height","auto")
+			map.css("width","0px")
+			map.css("height","0px")
+		}else{
+			detail.css("width","0px")
+			detail.css("height","0px")
+			map.css("width",width)
+			map.css("height","300px")
+			map.gmap3({trigger:"resize"});
+			center_map()
+		}
+		
+	});
+
+}
+
+
+function back_to_list(){
+	$("#back_to_list").click(function(){
+		detail=$(".event_detail")
+		map=$("#map_detail")
+		events_list=$("#events_list")
+		detail.css("width","0px")
+		detail.css("height","0px")
+		map.css("width","0px")
+		map.css("height","0px")
+		events_list.css("width","100%")
+		events_list.css("height","auto")
+		$("#back_to_list").css("display","none")
+		$("##toggle_map_detail").css("display","none")
+	});	
 }
 
 function addMarkers(){
@@ -238,4 +300,27 @@ function addMarkers(){
 			$("#form_container").html("");
 		});	
 	}
+
+
+	function center_map()
+	{
+
+		map=$("#map_detail")
+		id=($(".selected_event").find("td:first").html())
+		lat=$(".selected_event").find("td:eq(1)").html().substring($(".selected_event").find("td:eq(1)").html().indexOf("[")+1,$(".selected_event").find("td:eq(1)").html().lastIndexOf(","))
+		lng=$(".selected_event").find("td:eq(1)").html().substring($(".selected_event").find("td:eq(1)").html().lastIndexOf(",")+1,$(".selected_event").find("td:eq(1)").html().indexOf("]"))
+		map.gmap3("get").setCenter(new google.maps.LatLng(lat,lng))
+
+	}	
+
+
+
+
+
+
+
+
+
+
+
 

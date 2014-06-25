@@ -29,8 +29,10 @@
 			
 		</div>
 		</div>
-
+		<div id="back_to_list"><a href="#">Back to list</a></div>
+		<div id="toggle_map_detail"><a href="#">Map/Detail</a></div>
 		{% for event in event_list%}
+		
 		<ul class="event_detail" id="{{ event.id }}">
 			<li>{{ event.title }}</li>
 			<li>{{ event.description }}</li>
@@ -45,5 +47,6 @@
 			<div class="comments">
 			{% include "eventslist/comments.html" %}
 			</div>
+			
 		</ul>
 		{% endfor %}
