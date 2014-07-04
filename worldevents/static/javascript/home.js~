@@ -214,6 +214,7 @@ function toggle_map_detail(){
 		}else{
 			width="50%"
 		}
+		
 		if (detail.width()<=1){
 			detail.css("width",width)
 			detail.css("height","auto")
@@ -245,7 +246,7 @@ function back_to_list(){
 		events_list.css("width","100%")
 		events_list.css("height","auto")
 		$("#back_to_list").css("display","none")
-		$("##toggle_map_detail").css("display","none")
+		$("#toggle_map_detail").css("display","none")
 	});	
 }
 

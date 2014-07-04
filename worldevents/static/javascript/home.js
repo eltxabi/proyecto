@@ -188,8 +188,8 @@ function changeEvent(){
 			$("#events_list").css("overflow","hidden")
 			$(".event_detail").css("width","100%")
 			$(".event_detail").css("height","auto")
-			$("#toggle_map_detail").css("display","block")
-			$("#back_to_list").css("display","block")
+			$("#toggle_map_detail").css("display","inline")
+			$("#back_to_list").css("display","inline")
 		}
 
 	});
@@ -214,6 +214,7 @@ function toggle_map_detail(){
 		}else{
 			width="50%"
 		}
+		
 		if (detail.width()<=1){
 			detail.css("width",width)
 			detail.css("height","auto")

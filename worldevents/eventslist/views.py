@@ -14,6 +14,8 @@ from django.conf import settings
 from time import time
 import os
 
+from storages import storage
+
 def home(request,num_events='15'):
    '''
    if hasattr(request,'session'):
@@ -78,7 +80,10 @@ def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
 	if form.is_valid():
-	    User.create_user(form.cleaned_data['username'],form.cleaned_data['password1'])  
+	    try:	
+	        User.create_user(form.cleaned_data['username'],form.cleaned_data['password1'])  
+	    except pymongo.errors.AutoReconnect as e:
+    		print '%s (%s)' % (e.message, type(e))	
 	    messages.success(request, form.cleaned_data['username'] + ' you have been successfully registered')
 	    return HttpResponseRedirect("/")	
     else:
@@ -131,9 +136,13 @@ def addevent(request):
 	    if (request.FILES):
 		photo_name=request.user.username+"-"+str(int(time()))+".jpeg"
 		f=request.FILES["photo"]
+		'''
 		with open(settings.MEDIA_ROOT+photo_name, 'wb+') as destination:
         		for chunk in f.chunks():
             			destination.write(chunk)
+		'''
+		strg=storage()
+		getattr(strg,settings.STORAGE+"_write")(photo_name,f)
 	    	event.photo=photo_name
             event.location=[float(lat),float(lng)] 
             event.save() 	
@@ -152,7 +161,11 @@ def deleteevent(request,event_id):
     if request.method == 'POST':
 	event=Event.objects(id=event_id)[0]
 	if event.photo is not None:
+		strg=storage()
+		getattr(strg,settings.STORAGE+"_remove")(event.photo)
+		'''	
 		os.remove(settings.MEDIA_ROOT+event.photo)
+		'''
 	event.delete()
 	return HttpResponseRedirect("/")
     
@@ -174,13 +187,21 @@ def editevent(request,event_id):
 	    user=request.user.username
 	    event = Event(id=event_id,title=title,description=description,category=category,photo=photo,user=user)		
 	    if (request.FILES):
+		strg=storage()
 		if photo is not None:
-			os.remove(settings.MEDIA_ROOT+photo)	
+			'''
+			os.remove(settings.MEDIA_ROOT+photo)
+			'''
+			getattr(strg,settings.STORAGE+"_remove")(photo)	
 		photo_name=request.user.username+"-"+str(int(time()))+".jpeg"
 		f=request.FILES["photo"]
+		'''
 		with open(settings.MEDIA_ROOT+photo_name, 'wb+') as destination:
         		for chunk in f.chunks():
             			destination.write(chunk)
+		'''
+		
+		getattr(strg,settings.STORAGE+"_write")(photo_name,f)
 	    	event.photo=photo_name
             event.location=[float(lat),float(lng)] 
             event.save() 	

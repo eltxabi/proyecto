@@ -12,6 +12,12 @@ header{
 	
 }
 
+form{
+	font-size: 1.5em;
+	font-family: 'Aladin', cursive;
+	color: #848484;
+}
+
 h1{
 	display: inline;
 	padding: 0.3em;
@@ -265,6 +271,15 @@ nav ul li a:hover
 	border-top: solid 0.1em;
 }
 
+.comments a{
+	text-decoration:none;
+	font-size: 1.2em;
+	font-family: 'Aladin', cursive;
+	color: white;
+	background-color: #F00;
+	border-radius: 0.4em;
+}
+
 .comments form{
 	display:none;
 }
@@ -304,16 +319,34 @@ nav ul li a:hover
 	border-radius: 0.4em;
 	box-shadow: 0.2em 0.2em 0.5em #888888;
 	
-
 }
 
 #form_container img{
 	width:70%;
 }
 
+#back_to_list a{
+	text-decoration:none;
+	font-size: 1.2em;
+	font-family: 'Aladin', cursive;
+	color: white;
+	background-color: #F00;
+	border-radius: 0.4em;
+}
+
+#toggle_map_detail a{
+	text-decoration:none;
+	font-size: 1.2em;
+	font-family: 'Aladin', cursive;
+	color: white;
+	background-color: #F00;
+	border-radius: 0.4em;
+}
+
+
 @media screen and (min-width: 1150px){
 #events_list{
-	width: 20%;
+	width: 25%;
 	display:inline;
 	float:left;
 	margin:0.3em;
@@ -321,7 +354,7 @@ nav ul li a:hover
 }
 
 #container > ul{
-	width:40%;
+	width:35%;
 }
 
 #container ul[style*="display: block"] {
@@ -338,7 +371,7 @@ nav ul li a:hover
 	margin:0.3em;
 	padding: 0.1em;
 	width: 30%;
-	height: 300px;
+	height: 600px;
 }
 
 #toggle_map_detail{
@@ -429,8 +462,15 @@ nav ul li a:hover
 }
 
 #toggle_map_detail{
-	display: none;	
+	display: none;
+	width: 3em;
 }
+
+#back_to_list{
+	display: none;
+	width:3em;
+}
+
 }
 
 

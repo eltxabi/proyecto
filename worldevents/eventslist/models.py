@@ -1,7 +1,9 @@
 from mongoengine.queryset import QuerySet
 from mongoengine import *
 from django.conf import settings
+'''
 from eventslist.managers import EventManager
+'''
 
 import datetime
 
