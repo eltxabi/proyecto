@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'dkh!=y2d5@odkfngnz$(xotn=r-9(!gyddqo&u*#-!4f%t^ae!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = True
 
@@ -81,8 +81,8 @@ USE_TZ = True
 
 #S3 STORAGE
 
-AWS_ACCESS_KEY_ID = 'AKIAIHWQD6PMEPVUYK4A'
-AWS_SECRET_ACESS_KEY = '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'
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACESS_KEY = ''
 BUCKET_NAME = 'worldevents_static'
 
 

@@ -13,7 +13,7 @@ from mongoengine import *
 from django.conf import settings
 from time import time
 import os
-
+from pymongo.errors import AutoReconnect 
 from storages import storage
 
 def home(request,num_events='15'):
@@ -26,7 +26,12 @@ def home(request,num_events='15'):
    	if "search_query" in request.session:
 		event_list=Event.search(request.session['search_query']['title'],request.session['search_query']['category'],request.session['search_query']['lat'],request.session['search_query']['lng'],request.session['search_query']['distance'],int(num_events))
    	else:
-   		event_list = Event.objects.order_by('-added_date')[int(num_events)-15:int(num_events)]
+		print "aqui"
+		try:
+   			event_list = Event.objects.order_by('-added_date')[int(num_events)-15:int(num_events)]
+		except AutoReconnect:
+			print "fallooooooooooooooooooooooo"
+			raise Exception("FALLO GORDO")
    else:
 	event_list=request.session['event_list'] 
 	del request.session['event_list']  
@@ -79,13 +84,14 @@ def searchevents(request):
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-	if form.is_valid():
-	    try:	
-	        User.create_user(form.cleaned_data['username'],form.cleaned_data['password1'])  
-	    except pymongo.errors.AutoReconnect as e:
-    		print '%s (%s)' % (e.message, type(e))	
-	    messages.success(request, form.cleaned_data['username'] + ' you have been successfully registered')
-	    return HttpResponseRedirect("/")	
+	print "Empezeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+	try:
+		if form.is_valid():
+	    		User.create_user(form.cleaned_data['username'],form.cleaned_data['password1'])  
+	    		messages.success(request, form.cleaned_data['username'] + ' you have been successfully registered')
+	    		return HttpResponseRedirect("/")	
+	except:
+    		print "eeeeeeeeeeeeeeeeeeeeeeeeeerro"	
     else:
         form = RegistrationForm()
     return render(request, "eventslist/register.html", {
