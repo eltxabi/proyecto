@@ -1,9 +1,19 @@
-
-  {% if form %}
+{% load i18n %}	
+<div id='messages'>
+		{% if messages %}
+			<ul class="messages">
+	    		{% for message in messages %}
+	    			<li{% if message.tags %}class="{{ message.tags }}"
+				{% endif %}>{{ message }}</li>
+    			{% endfor %}
+			</ul>
+		{% endif %}	
+</div>
+{% if form %}
 	  <form action="{% url 'login' %}" method="post">
 	      {{ form.as_p }}
 	      {% csrf_token %} 
-	      <input type="submit" value="login">
+	      <input type="submit" value={% trans "login" %}>
 	  </form>
-  {% endif %}
+{% endif %}
 

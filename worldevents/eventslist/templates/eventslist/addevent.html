@@ -1,19 +1,20 @@
-<h1>Add Event</h1>
+
+{% load i18n %}
+<h1>{% trans "Add Event" %}</h1>
 
 	  <form enctype="multipart/form-data" action="{% url 'addevent' %}" method="post">
 	      {{ form.as_p }}
 	      <img src="#" alt="preview image"/>	
-	      <p>Select location in the map</p>
-              <!--<div id="Location">Location:</div>-->
+	      <p>{% trans "Select location in the map" %}</p>
               <div id="map_addevent"></div>
 	      {% csrf_token %} 
-	      <input type="submit" value="add">
+	      <input type="submit" value={% trans "add" %}>
 	  </form>
  
 
 
  <script type="text/javascript">
-	
+	// Draw map
 	$( document ).ready(function() {
 	  red_icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"	
           $("#map_addevent").width("300px").height("150px").gmap3({
@@ -24,8 +25,7 @@
             },
             events:{
               click: function(map,event){
-                //$("#Location").text("Location: Lat: "+event.latLng.lat()+" Lon: "+event.latLng.lng());
-		$("#id_lat").val(event.latLng.lat());
+                $("#id_lat").val(event.latLng.lat());
 		$("#id_lng").val(event.latLng.lng());
 		drawMarker(event.latLng.lat(),event.latLng.lng())
               }
@@ -37,7 +37,8 @@
 	if (($("#id_lat").val())&&($("#id_lng").val())){
 		drawMarker($("#id_lat").val(),$("#id_lng").val())	
 	}
-
+	
+	//Put selected image in form
 	$("input[type='file']").bind("change",function(){
 		file=$(this).prop("files")[0]
 		img = $("form img[alt='preview image']")
@@ -47,7 +48,8 @@
 		}
     		reader.readAsDataURL(file);
 	});
-
+	
+	//Draw marker when user has clicked
 	function drawMarker(lat,lng){
 		$("#map_addevent").gmap3({
 				clear:{

@@ -1,13 +1,11 @@
 from mongoengine.queryset import QuerySet
 from mongoengine import *
 from django.conf import settings
-'''
-from eventslist.managers import EventManager
-'''
-
 import datetime
 
 connect('worldevents')
+
+#####################################################################################
 
 class Comment(EmbeddedDocument):
    content = StringField()
@@ -17,6 +15,7 @@ class Comment(EmbeddedDocument):
    def __str__(self):
       return self.content	
 
+######################################################################################
 
 class Event(Document):
    
@@ -29,6 +28,7 @@ class Event(Document):
    comments = ListField(EmbeddedDocumentField(Comment))	
    user = StringField()
 
+   # Search query
    @queryset_manager
    def search(doc_cls, queryset,title,category,lat,lng,distance,num_events):
       	    if title and category:
@@ -49,6 +49,7 @@ class Event(Document):
 
    meta = {'collection':'event'}
 
+##########################################################################################333
 
 class Category(Document):
    name = StringField(max_length = 64, required = True, unique = True)

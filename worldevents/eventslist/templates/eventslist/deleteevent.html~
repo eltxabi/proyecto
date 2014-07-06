@@ -4,4 +4,5 @@
 	      <p>Delete Event,¿are you sure?</p>
               {% csrf_token %} 
 	      <input type="submit" value="Delete">
+	      <input type="button" value="Cancel">	
 	  </form>

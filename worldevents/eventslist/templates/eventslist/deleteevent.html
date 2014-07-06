@@ -1,8 +1,10 @@
-<h1>Delete Event</h1>
+
+{% load i18n %}	
+<h1>{% trans "Delete Event" %}</h1>
 
 	  <form action="{% url 'eventslist.views.deleteevent' %}/{{ id }}" method="post">
-	      <p>Delete Event,¿are you sure?</p>
+	      <p>{% trans "Delete Event,¿are you sure?" %}</p>
               {% csrf_token %} 
-	      <input type="submit" value="Delete">
-	      <input type="button" value="Cancel">	
+	      <input type="submit" value={% trans "Delete" %}>
+	      <input type="button" value={% trans "Cancel" %}>	
 	  </form>

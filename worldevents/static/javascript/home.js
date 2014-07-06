@@ -34,16 +34,22 @@ function init() {
 
 	//back to list link
 	back_to_list()
+	
+	//clear inline style
+	manage_resize()
 	}
 
+//Select longitude of first event
 function first_lng(){
 return $("tr:first").find("td:eq(1)").html().substring($("tr:first").find("td:eq(1)").html().lastIndexOf(",")+1,$("tr:first").find("td:eq(1)").html().indexOf("]"))
 }
 
+//Select latitude of first event
 function first_lat(){
 return $("tr:first").find("td:eq(1)").html().substring($("tr:first").find("td:eq(1)").html().indexOf("[")+1,$("tr:first").find("td:eq(1)").html().lastIndexOf(","))
 }
 
+//Create map detail
 function create_map_detail(lat,lng){
 $("#map_detail").gmap3({
           map:{
@@ -55,28 +61,30 @@ $("#map_detail").gmap3({
         });
 }
 
+//Add class 'selected_event' to first event
 function set_first_event(){
 $("tr:first").addClass("selected_event")
 	id=($(".selected_event").find("td:first").html())
 	$("#"+id).toggle()
 }
 
+//Show and hide add_comment form
 function toggle_comments_form(){
 $("a[href='comment']").on("click",function(e){
 		e.preventDefault()
 		if ($(this).text()=="Add comment"){
 			$(this).text("Close")
-			$(".event_detail[style='display: block;'] form").show()
+			$(".event_detail[style*='display: block;'] form").show()
 			
 		}else{
 			$(this).text("Add comment")
-			$(".event_detail[style='display: block;'] form").hide()
+			$(".event_detail[style*='display: block;'] form").hide()
 		}
 		
 	});
 }
 
-
+//Load form in form_container
 function show_form(){
 $(".form").on("click",function(e){
 		e.preventDefault()
@@ -88,6 +96,7 @@ $(".form").on("click",function(e){
 	});
 }
 
+//Process comment form using ajax
 function process_comment_form(){
 	$("ul.event_detail").on("submit","form",function(e){
 		e.preventDefault();
@@ -118,17 +127,16 @@ function process_comment_form(){
 }
 
 
-
+//Process event form using ajax
 function process_event_form(){
 	$("#form_container").on("submit","form",function(e){
 		e.preventDefault();
-		//var postData = $(this).serializeArray();
+		
 		var postData = new FormData()
 		$("#form_container form input[type='file']").each(function(i) {
 			postData.append($(this).attr("name"), $(this).get(0).files[0]);
 		});
-		//postData.append("photo", $('#id_photo').get(0).files[0]);
-
+		
     $("form textarea, form select, form input:not([type='submit']):not([name='photo'])").each(function(i) {
         postData.append($(this).attr("name"), $(this).val());
 	
@@ -159,6 +167,7 @@ function process_event_form(){
 	});
 }
 
+//Change selected event when user clicks on it
 function changeEvent(){
 	$("tr").click(function(){
 		map=$("#map_detail")
@@ -196,6 +205,7 @@ function changeEvent(){
 }
 
 
+//Hide messages
 function delete_messages(){
 	$("#messages").fadeOut(5000, "linear",function(){
 		$(".messages").remove()
@@ -204,12 +214,13 @@ function delete_messages(){
 }
 
 
-
+//Manage Map/Detail link
 function toggle_map_detail(){
 	$("#toggle_map_detail").click(function(){
+		
 		detail=$(".event_detail")
 		map=$("#map_detail")
-		if ($(window).width()<800){
+		if ($(window).width()<768){
 			width="100%"
 		}else{
 			width="50%"
@@ -224,7 +235,7 @@ function toggle_map_detail(){
 			detail.css("width","0px")
 			detail.css("height","0px")
 			map.css("width",width)
-			map.css("height","300px")
+			map.css("height","550px")
 			map.gmap3({trigger:"resize"});
 			center_map()
 		}
@@ -233,7 +244,7 @@ function toggle_map_detail(){
 
 }
 
-
+//Manage Back_to_list link
 function back_to_list(){
 	$("#back_to_list").click(function(){
 		detail=$(".event_detail")
@@ -250,6 +261,23 @@ function back_to_list(){
 	});	
 }
 
+//Set sizes when windows is resized
+function manage_resize(){
+	$( window ).resize(function() {
+		detail=$(".event_detail")
+		map=$("#map_detail")
+		events_list=$("#events_list")
+		map.css("width","")
+		map.css("height","")
+		detail.css("width","")
+		detail.css("height","")
+		events_list.css("width","")
+		events_list.css("height","")
+		
+	});
+}
+
+//Add markers to map showing events positions
 function addMarkers(){
 		map=$("#map_detail")
 		$("tr").each(function(){
@@ -268,51 +296,51 @@ function addMarkers(){
 	}
 
 
-	function addMarker(map,tag_label,icon_image,lat,lng){
-		map.gmap3({
-				marker:{
-					latLng:[lat,lng],
-					tag:tag_label,
-					options:{
-						draggable:true,
-						icon: icon_image
-					}
+//Add marker to map
+function addMarker(map,tag_label,icon_image,lat,lng){
+	map.gmap3({
+			marker:{
+				latLng:[lat,lng],
+				tag:tag_label,
+				options:{
+					draggable:true,
+					icon: icon_image
 				}
-		});
-	}
+			}
+	});
+}
 
-	function show_form_container()
-	{	
-		$("body").append("<div id='shade'></div>")
-		$("#form_container").css("display","block")
-		show_close_link()
-		$("input[value='Cancel']").click(function(){
-			$("#shade").remove();
-			$("#form_container").html("");
-		});	
-		
-	}
+//Show shade div and form container
+function show_form_container()
+{	
+	$("body").append("<div id='shade'></div>")
+	$("#form_container").css("display","block")
+	show_close_link()
+	$("input[value='Cancel']").click(function(){
+		$("#shade").remove();
+		$("#form_container").html("");
+	});	
+}
 
-	function show_close_link()
-	{
-		$("#form_container").append("<div class='close'><a href='#'>X</a></div>");
-		$(".close").click(function(){
-			$("#shade").remove();
-			$("#form_container").html("");
-		});	
-	}
+//Show close link in form container
+function show_close_link()
+{
+	$("#form_container").append("<div class='close'><a href='#'>X</a></div>");
+	$(".close").click(function(){
+		$("#shade").remove();
+		$("#form_container").html("");
+	});	
+}
 
-
-	function center_map()
-	{
-
-		map=$("#map_detail")
-		id=($(".selected_event").find("td:first").html())
-		lat=$(".selected_event").find("td:eq(1)").html().substring($(".selected_event").find("td:eq(1)").html().indexOf("[")+1,$(".selected_event").find("td:eq(1)").html().lastIndexOf(","))
-		lng=$(".selected_event").find("td:eq(1)").html().substring($(".selected_event").find("td:eq(1)").html().lastIndexOf(",")+1,$(".selected_event").find("td:eq(1)").html().indexOf("]"))
-		map.gmap3("get").setCenter(new google.maps.LatLng(lat,lng))
-
-	}	
+//Center map in selected event position
+function center_map()
+{
+	map=$("#map_detail")
+	id=($(".selected_event").find("td:first").html())
+	lat=$(".selected_event").find("td:eq(1)").html().substring($(".selected_event").find("td:eq(1)").html().indexOf("[")+1,$(".selected_event").find("td:eq(1)").html().lastIndexOf(","))
+	lng=$(".selected_event").find("td:eq(1)").html().substring($(".selected_event").find("td:eq(1)").html().lastIndexOf(",")+1,$(".selected_event").find("td:eq(1)").html().indexOf("]"))
+	map.gmap3("get").setCenter(new google.maps.LatLng(lat,lng))
+}	
 
 
 

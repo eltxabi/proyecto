@@ -1,5 +1,6 @@
 {% extends "eventslist/base.html" %}
 {% load staticfiles %}
+{% load i18n %}	
 {% block stylesheets %}
 	<link rel="stylesheet" type="text/css" href={% static "css/base.css" %} >
 	<link href='http://fonts.googleapis.com/css?family=Sonsie+One' rel='stylesheet' type='text/css'>
@@ -18,16 +19,16 @@
 {% block nav %}
 <ul>
 {% if user.is_authenticated %}	
-	<li><a href="{% url 'eventslist.views.logoutpage' %}">Logout</a></li>
-	<li><a class="form" href="{% url 'eventslist.views.addevent' %}">Add Event</a></li>
+	<li><a href="{% url 'eventslist.views.logoutpage' %}">{% trans "Logout" %}</a></li>
+	<li><a class="form" href="{% url 'eventslist.views.addevent' %}">{% trans "Add Event" %}</a></li>
 			
 {% else %}
-	<li><a class="form" href="{% url 'eventslist.views.register' %}">Registro</a></li>
-	<li><a class="form" href="{% url 'eventslist.views.loginpage' %}">Login</a></li>
+	<li><a class="form" href="{% url 'eventslist.views.register' %}">{% trans "Registro" %}</a></li>
+	<li><a class="form" href="{% url 'eventslist.views.loginpage' %}">{% trans "Login" %}</a></li>
 
-{% endif %}
+{% endif %}%}
 
-	<li><a class="form" href="{% url 'eventslist.views.searchevents' %}">Search</a></li>
+	<li><a class="form" href="{% url 'eventslist.views.searchevents' %}">{% trans "Search" %}</a></li>
 	
 </ul>
 {% endblock %}	
@@ -44,9 +45,7 @@
 	<div id="container">
 	{% if event_list %}
 		{% include "eventslist/eventslist.html" %}
-		<div id="map_detail">
-			<a href="detail">Detail</a>
-		</div>
+		<div id="map_detail"></div>
 	{% endif %}
 	<div>
 	<div id="form_container">

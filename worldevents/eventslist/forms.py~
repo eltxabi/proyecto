@@ -4,29 +4,33 @@ from django.utils.text import capfirst
 from django.forms.widgets import Input
 from mongoengine.django.auth import User
 from eventslist.models import Category
+from django.utils.translation import gettext as _
+
+
 
 class RangeInput(Input):
     input_type='range'
 
 class SearchForm(forms.Form):
     error_messages = {
-        'location_not_selected': "You must select a location",  
-	'distance_out_of_range': "Distance must be between 1 and 100",      
+        'location_not_selected': _("You must select a location"),  
+	'distance_out_of_range': _("Distance must be between 1 and 100"),      
     }    
 
-  
-    title = forms.CharField(label="Title", max_length=30, required=False)
-    category = forms.ChoiceField(label="Category", required=False, widget=forms.Select)
+    title = forms.CharField(label=_("Title"), max_length=30, required=False)
+    category = forms.ChoiceField(label=_("Category"), required=False, widget=forms.Select)
     lat = forms.CharField(required=False,widget=forms.HiddenInput)  
     lng = forms.CharField(required=False,widget=forms.HiddenInput) 
-    distance = forms.CharField(label="Distance",widget=RangeInput(attrs={'min':'1','max':'100','value':'1'}))    
- 
+    distance = forms.CharField(label=_("Distance"),widget=RangeInput(attrs={'min':'1','max':'100','value':'1'}))    
+
+    # Load categories from database		 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
         choices = [(unicode(pt), unicode(pt)) for pt in Category.objects.all()]
         self.fields['category'].choices = choices
-	self.fields['category'].choices.insert(0,('','Select category'))       
+	self.fields['category'].choices.insert(0,('',_('Select category')))       
     
+    # Check location data
     def clean(self):
        cleaned_data = super(SearchForm,self).clean()
        lat = cleaned_data.get("lat")
@@ -43,22 +47,22 @@ class SearchForm(forms.Form):
 
 class RegistrationForm(forms.Form):
     error_messages = {
-        'duplicate_username': "A user with that username already exists.",
-        'password_mismatch': "The two password fields didn't match.",
+        'duplicate_username': _("A user with that username already exists."),
+        'password_mismatch': _("The two password fields didn't match."),
     }
-    username = forms.RegexField(label="Username", max_length=30,
+    username = forms.RegexField(label=_("Username"), max_length=30,
         regex=r'^[\w.@+-]+$',
-        help_text="Required. 30 characters or fewer. Letters, digits and "
-                      "@/./+/-/_ only.",
+        help_text=_("Required. 30 characters or fewer. Letters, digits and "
+                      "@/./+/-/_ only."),
         error_messages={
-            'invalid': "This value may contain only letters, numbers and "
-                         "@/./+/-/_ characters."})
-    password1 = forms.CharField(label="Password",
-        widget=forms.PasswordInput)
-    password2 = forms.CharField(label="Password confirmation",
+            'invalid': _("This value may contain only letters, numbers and "
+                         "@/./+/-/_ characters.")})
+    password1 = forms.CharField(label=_("Password"),widget=forms.PasswordInput)
+    password2 = forms.CharField(label=_("Password confirmation"),
         widget=forms.PasswordInput,
-        help_text="Enter the same password as above, for verification.")
+        help_text=_("Enter the same password as above, for verification."))
 
+    # Check passwords are equal and username don't exist
     def clean(self):
        cleaned_data = super(RegistrationForm,self).clean()
        user_name = cleaned_data.get("username")
@@ -78,22 +82,24 @@ class CommentForm(forms.Form):
     
 class EventForm(forms.Form):
     error_messages = {
-        'location_not_selected': "You must select a location",       
+        'location_not_selected': _("You must select a location"),       
     }    
 
-    title = forms.CharField(label="Title", max_length=30)
-    description = forms.CharField(label="Description",widget=forms.Textarea)
-    category = forms.ChoiceField(label="Category",widget=forms.Select)
+    title = forms.CharField(label=_("Title"), max_length=30)
+    description = forms.CharField(label=_("Description"),widget=forms.Textarea)
+    category = forms.ChoiceField(label=_("Category"),widget=forms.Select)
     photo = forms.ImageField(required=False)	
     lat = forms.CharField(required=False,widget=forms.HiddenInput)  
     lng = forms.CharField(required=False,widget=forms.HiddenInput) 
-
+    
+    # Load categories from database
     def __init__(self, *args, **kwargs):
         super(EventForm, self).__init__(*args, **kwargs)
         choices = [(unicode(pt), unicode(pt)) for pt in Category.objects.all()]
         self.fields['category'].choices = choices
 	self.fields['category'].choices.insert(0,('','Select category'))       
     
+    # Check if location is selected
     def clean(self):
        cleaned_data = super(EventForm,self).clean()
        lat = cleaned_data.get("lat")
@@ -103,78 +109,7 @@ class EventForm(forms.Form):
           raise forms.ValidationError(self.error_messages['location_not_selected']) 
        
        return cleaned_data  
-'''
-class AuthenticationForm(forms.Form):
-    """
-Base class for authenticating users. Extend this to get a form that accepts username/password logins.
-"""
-    username = forms.CharField(max_length=254)
-    password = forms.CharField(label="Password", widget=forms.PasswordInput)
 
-    error_messages = {
-        'invalid_login': "Please enter a correct %(username)s and password. "
-        "Note that both fields may be case-sensitive.",
-        'inactive': "This account is inactive.",
-    }
-
-    def __init__(self, request=None, *args, **kwargs):
-        """
-The 'request' parameter is set for custom auth use by subclasses.
-The form data comes in via the standard 'data' kwarg.
-"""
-        self.request = request
-        self.user_cache = None
-        super(AuthenticationForm, self).__init__(*args, **kwargs)
-
-        # Set the label for the "username" field.
-        UserModel = get_user_model()
-        self.username_field = UserModel._meta.get_field(UserModel.USERNAME_FIELD)
-        if self.fields['username'].label is None:
-            self.fields['username'].label = capfirst(self.username_field.verbose_name)
-
-    def clean(self):
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
-
-        if username and password:
-            self.user_cache = authenticate(username=username,
-                                           password=password)
-            if self.user_cache is None:
-                raise forms.ValidationError(
-                    self.error_messages['invalid_login'],
-                    code='invalid_login',
-                    params={'username': self.username_field.verbose_name},
-                )
-            else:
-                self.confirm_login_allowed(self.user_cache)
-
-        return self.cleaned_data
-
-    def confirm_login_allowed(self, user):
-        """
-Controls whether the given User may log in. This is a policy setting,
-independent of end-user authentication. This default behavior is to
-allow login by active users, and reject login by inactive users.
-
-If the given user cannot log in, this method should raise a
-``forms.ValidationError``.
-
-If the given user may log in, this method should return None.
-"""
-        if not user.is_active:
-            raise forms.ValidationError(
-                self.error_messages['inactive'],
-                code='inactive',
-            )
-
-    def get_user_id(self):
-        if self.user_cache:
-            return self.user_cache.id
-        return None
-
-    def get_user(self):
-        return self.user_cache
-'''
 
 
 

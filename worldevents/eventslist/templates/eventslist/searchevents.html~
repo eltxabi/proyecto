@@ -1,15 +1,19 @@
+{% load i18n %}
 	
+	<h1>{% trans "Search" %}</h1>
 	  <form action="{% url 'searchevents' %}" method="post">
 	      {{ form.as_p }}
 	      <div id="distance">1 km</div>
-              <p>Select location in the map</p>
-              <div id="Location">Location:</div>
+              <p>{% trans "Select location in the map" %}</p>
+              <div id="Location">{% trans "Location" %}:</div>
               <div id="my_map"></div>
 	      {% csrf_token %} 
-	      <input type="submit" value="search">
+	      <input type="submit" value={% trans "search" %}>
 	  </form>
+
   
 <script type="text/javascript">	
+	// Draw map
 	$( document ).ready(function() {
 	  red_icon="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
           $("#my_map").width("300px").height("150px").gmap3({
@@ -34,12 +38,14 @@
 	if (($("#id_lat").val())&&($("#id_lng").val())){
 		drawMarker($("#id_lat").val(),$("#id_lng").val())	
 	}
-
+	
+	//if distance changes
 	$("#id_distance").change(function(){
 		$("#distance").text($(this).val()+" km")
 		drawCircle($("#id_lat").val(),$("#id_lng").val(),$("#id_distance").val())
 	});
 
+	//Draw marker when user has clicked
 	function drawMarker(lat,lng){
 		$("#my_map").gmap3({
 				clear:{
@@ -56,6 +62,7 @@
 		});
 	}
 
+	//Draw distance circle
 	function drawCircle(lat,lng,rad){
 		$("#my_map").gmap3({
 				clear:{

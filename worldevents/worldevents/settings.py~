@@ -25,7 +25,7 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -38,7 +38,6 @@ INSTALLED_APPS = (
      'django.contrib.messages',
      'django.contrib.staticfiles',
      'eventslist',
-     
 )
 
 MIDDLEWARE_CLASSES = (
@@ -79,35 +78,14 @@ USE_L10N = True
 USE_TZ = True
 
 
-#S3 STORAGE
-
-AWS_ACCESS_KEY_ID = 'AKIAIHWQD6PMEPVUYK4A'
-AWS_SECRET_ACESS_KEY = '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'
-BUCKET_NAME = 'worldevents_static'
-
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
-if DEBUG:
+STATIC_URL = '/static/'
 
-	STATIC_URL = '/static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
-	STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
-
-	MEDIA_ROOT=os.path.join(BASE_DIR, "static/media/")
-
-	STORAGE = "local"
-
-else:
-
-	STATIC_URL = 'https://s3.amazonaws.com/worldevents_static/'
-
-	STATICFILES_DIRS = 'https://s3.amazonaws.com/worldevents_static/'
-
-	MEDIA_ROOT='https://s3.amazonaws.com/worldevents_static/media/'
-
-	STORAGE = "s3"
+MEDIA_ROOT=os.path.join(BASE_DIR, "static/media/")
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
@@ -118,10 +96,7 @@ DATABASES = {
     }
 }
 
-#log
-LOGGING = {
-    'version': 1,
-}
+
 
 #MongoDatabase
 

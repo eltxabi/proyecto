@@ -345,7 +345,7 @@ nav ul li a:hover
 }
 
 
-@media screen and (min-width: 1150px){
+@media screen and (min-width: 1024px){
 #events_list{
 	width: 25%;
 	display:inline;
@@ -372,6 +372,7 @@ nav ul li a:hover
 	margin:0.3em;
 	padding: 0.1em;
 	width: 30%;
+	height: 600px;
 	
 }
 
@@ -385,7 +386,7 @@ nav ul li a:hover
 
 }
 
-@media screen and (min-width: 780px) and (max-width: 1149px){
+@media screen and (min-width: 769px) and (max-width: 1023px){
 
 #events_list{
 	width: 40%;
@@ -430,7 +431,7 @@ nav ul li a:hover
 
 }
 
-@media screen and (max-width: 769px){
+@media screen and (max-width: 768px){
 #events_list{
 	width: 100%;
 	display:inline;

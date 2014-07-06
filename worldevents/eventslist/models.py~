@@ -1,9 +1,6 @@
 from mongoengine.queryset import QuerySet
 from mongoengine import *
 from django.conf import settings
-'''
-from eventslist.managers import EventManager
-'''
 
 import datetime
 
@@ -45,7 +42,7 @@ class Event(Document):
         
       
    def __str__(self):
-      return self.title 
+      return self.title +'-'+str(self.location['coordinates'][0])+str(self.location['coordinates'][1])+'-'+self.description +'-'+self.category
 
    meta = {'collection':'event'}
 

@@ -1,9 +1,10 @@
-  <h1>Create an account</h1>
+{% load i18n %}	
+  <h1>{% trans "Create an account" %}</h1>
 
-  <form action="" method="post">
+  <form action="{% url 'register' %}" method="post">
       {{ form.as_p }}
       {% csrf_token %} 
-      <input type="submit" value="Create the account">
+      <input type="submit" value={% trans "Create the account" %} >
   </form>
 
-
+%}

@@ -16,9 +16,7 @@
 			{% block nav %}
 	 		{% endblock %}		
 		</nav>
-		{% block user %}
-	 	{% endblock %}
-	</header>
+			
 	<div id='messages'>
 		{% if messages %}
 			<ul class="messages">
@@ -31,6 +29,7 @@
 			</ul>
 		{% endif %}	
 	</div>
+	</header>
 	 {% block content %}
 	 {% endblock %}
     

@@ -1,0 +1,114 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-07-04 18:44+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: eventslist/templates/eventslist/addevent.html:3
+#: eventslist/templates/eventslist/home.html:23
+msgid "Add Event"
+msgstr ""
+
+#: eventslist/templates/eventslist/addevent.html:8
+#: eventslist/templates/eventslist/editevent.html:8
+#: eventslist/templates/eventslist/searchevents.html:7
+msgid "Select location in the map"
+msgstr ""
+
+#: eventslist/templates/eventslist/addevent.html:11
+#: eventslist/templates/eventslist/comments.html:7
+msgid "add"
+msgstr ""
+
+#: eventslist/templates/eventslist/base.html:6
+#: eventslist/templates/eventslist/base.html:15
+msgid "WorldEvents"
+msgstr ""
+
+#: eventslist/templates/eventslist/comments.html:3
+msgid "Add comment"
+msgstr ""
+
+#: eventslist/templates/eventslist/deleteevent.html:3
+msgid "Delete Event"
+msgstr ""
+
+#: eventslist/templates/eventslist/deleteevent.html:6
+msgid "Delete Event,¿are you sure?"
+msgstr ""
+
+#: eventslist/templates/eventslist/deleteevent.html:8
+#: eventslist/templates/eventslist/eventslist.html:46
+msgid "Delete"
+msgstr ""
+
+#: eventslist/templates/eventslist/deleteevent.html:9
+msgid "Cancel"
+msgstr ""
+
+#: eventslist/templates/eventslist/editevent.html:3
+msgid "Edit Event"
+msgstr ""
+
+#: eventslist/templates/eventslist/editevent.html:11
+msgid "Save"
+msgstr ""
+
+#: eventslist/templates/eventslist/eventslist.html:33
+msgid "Back to list"
+msgstr ""
+
+#: eventslist/templates/eventslist/eventslist.html:34
+msgid "Map/Detail"
+msgstr ""
+
+#: eventslist/templates/eventslist/eventslist.html:45
+msgid "Edit"
+msgstr ""
+
+#: eventslist/templates/eventslist/home.html:22
+msgid "Logout"
+msgstr ""
+
+#: eventslist/templates/eventslist/home.html:26
+msgid "Registro"
+msgstr ""
+
+#: eventslist/templates/eventslist/home.html:27
+msgid "Login"
+msgstr ""
+
+#: eventslist/templates/eventslist/home.html:31
+#: eventslist/templates/eventslist/searchevents.html:3
+msgid "Search"
+msgstr ""
+
+#: eventslist/templates/eventslist/register.html:2
+msgid "Create an account"
+msgstr ""
+
+#: eventslist/templates/eventslist/register.html:7
+msgid "Create the account"
+msgstr ""
+
+#: eventslist/templates/eventslist/searchevents.html:8
+msgid "Location"
+msgstr ""
+
+#: eventslist/templates/eventslist/searchevents.html:11
+msgid "search"
+msgstr ""

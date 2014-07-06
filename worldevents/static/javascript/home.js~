@@ -34,6 +34,9 @@ function init() {
 
 	//back to list link
 	back_to_list()
+	
+	//clear inline style
+	manage_resize()
 	}
 
 function first_lng(){
@@ -66,11 +69,11 @@ $("a[href='comment']").on("click",function(e){
 		e.preventDefault()
 		if ($(this).text()=="Add comment"){
 			$(this).text("Close")
-			$(".event_detail[style='display: block;'] form").show()
+			$(".event_detail[style*='display: block;'] form").show()
 			
 		}else{
 			$(this).text("Add comment")
-			$(".event_detail[style='display: block;'] form").hide()
+			$(".event_detail[style*='display: block;'] form").hide()
 		}
 		
 	});
@@ -188,8 +191,8 @@ function changeEvent(){
 			$("#events_list").css("overflow","hidden")
 			$(".event_detail").css("width","100%")
 			$(".event_detail").css("height","auto")
-			$("#toggle_map_detail").css("display","block")
-			$("#back_to_list").css("display","block")
+			$("#toggle_map_detail").css("display","inline")
+			$("#back_to_list").css("display","inline")
 		}
 
 	});
@@ -207,9 +210,10 @@ function delete_messages(){
 
 function toggle_map_detail(){
 	$("#toggle_map_detail").click(function(){
+		
 		detail=$(".event_detail")
 		map=$("#map_detail")
-		if ($(window).width()<800){
+		if ($(window).width()<768){
 			width="100%"
 		}else{
 			width="50%"
@@ -224,7 +228,7 @@ function toggle_map_detail(){
 			detail.css("width","0px")
 			detail.css("height","0px")
 			map.css("width",width)
-			map.css("height","300px")
+			map.css("height","550px")
 			map.gmap3({trigger:"resize"});
 			center_map()
 		}
@@ -250,6 +254,20 @@ function back_to_list(){
 	});	
 }
 
+function manage_resize(){
+	$( window ).resize(function() {
+		detail=$(".event_detail")
+		map=$("#map_detail")
+		events_list=$("#events_list")
+		map.css("width","")
+		map.css("height","")
+		detail.css("width","")
+		detail.css("height","")
+		events_list.css("width","")
+		events_list.css("height","")
+		
+	});
+}
 function addMarkers(){
 		map=$("#map_detail")
 		$("tr").each(function(){

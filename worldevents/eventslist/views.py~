@@ -13,25 +13,16 @@ from mongoengine import *
 from django.conf import settings
 from time import time
 import os
-from pymongo.errors import AutoReconnect 
+import pymongo
 from storages import storage
 
+################################################################################
 def home(request,num_events='15'):
-   '''
-   if hasattr(request,'session'):
-	   if "search_query" in request.session:
-	   	messages.success(request,request.session["search_query"])
-   '''
-   if "event_list" not in request.session:
-   	if "search_query" in request.session:
+   if "event_list" not in request.session: # If there aren't results of a search in session
+   	if "search_query" in request.session: # If there is a current search
 		event_list=Event.search(request.session['search_query']['title'],request.session['search_query']['category'],request.session['search_query']['lat'],request.session['search_query']['lng'],request.session['search_query']['distance'],int(num_events))
    	else:
-		print "aqui"
-		try:
-   			event_list = Event.objects.order_by('-added_date')[int(num_events)-15:int(num_events)]
-		except AutoReconnect:
-			print "fallooooooooooooooooooooooo"
-			raise Exception("FALLO GORDO")
+		event_list = Event.objects.order_by('-added_date')[int(num_events)-15:int(num_events)]
    else:
 	event_list=request.session['event_list'] 
 	del request.session['event_list']  
@@ -39,6 +30,8 @@ def home(request,num_events='15'):
    form = CommentForm()
    return render(request, "eventslist/home.html", {'event_list':event_list,'num_events':num_events,'form':form,})  
 
+
+##################################################################################
 @login_required
 def addcomment(request):
    if request.method == 'POST':
@@ -53,9 +46,12 @@ def addcomment(request):
    else:
 	form = CommentForm()
 
-   event=Event.objects.get(id=event_id) 
+   event=Event.objects.get(id=event_id)
+   # Return only comments of modified event 
    return render(request, "eventslist/comments.html", {'form':form,'event':event}) 
 
+
+####################################################################################
 def searchevents(request):
    if request.method == 'POST':
 	form = SearchForm(request.POST)
@@ -68,35 +64,33 @@ def searchevents(request):
 	    
 	    event_list=Event.search(title,category,lat,lng,distance,15)
 	    
-	    if event_list:
-			
+	    if event_list: # Put search query and results in session
 		request.session["search_query"]={'title':title,'category':category,'lat':lat,'lng':lng,'distance':distance,'num_events':15}
 		request.session["event_list"]=list(event_list)
-		
 	    else:
-		messages.success(request,'No search results')
+		messages.success(request,_('No search results'))
 	    
 	    return HttpResponseRedirect("/")
    else:
 	form = SearchForm()
    return render(request, "eventslist/searchevents.html", {'form':form,})     
   
+##############################################################################################
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-	try:
-		if form.is_valid():
-	    		User.create_user(form.cleaned_data['username'],form.cleaned_data['password1'])  
-	    		messages.success(request, form.cleaned_data['username'] + ' you have been successfully registered')
-	    		return HttpResponseRedirect("/")	
-	except:
-    		print "eeeeeeeeeeeeeeeeeeeeeeeeeerro"	
+	if form.is_valid():
+		User.create_user(form.cleaned_data['username'],form.cleaned_data['password1'])  
+		messages.success(request, form.cleaned_data['username'] + _(' you have been successfully registered'))
+		return HttpResponseRedirect("/")	
     else:
         form = RegistrationForm()
     return render(request, "eventslist/register.html", {
         'form': form,
     })  
 
+
+##############################################################################################3333333
 def loginpage(request):
    if request.method == 'POST':
         form = AuthenticationForm(request.POST)
@@ -105,26 +99,25 @@ def loginpage(request):
         user = authenticate(username=username,password=password)
 	if user is not None:
 	   login(request,user)
-	   messages.success(request,'Login correcto ' + user.username)
+	   messages.success(request,_('Login Ok ') + user.username)
 	   return HttpResponseRedirect("/")
         else:
-           messages.success(request,'Login incorrecto')    
+           messages.success(request,_('Login Fail'))    
    else:
         form = AuthenticationForm()
-   
-   if hasattr(request,'session'):
-	   for s in request.session.iteritems():
-		messages.success(request,s) 
-	   
+ 
    return render(request,'eventslist/login.html', {
         'form': form,
     })  
 
+
+#####################################################################################
 @login_required
 def logoutpage(request):
    logout(request)
    return HttpResponseRedirect("/")
 
+######################################################################################
 @login_required
 def addevent(request):
     if request.method == 'POST':
@@ -137,21 +130,19 @@ def addevent(request):
 	    lat=form.cleaned_data['lat']
 	    lng=form.cleaned_data['lng']
 	    user=request.user.username
+
 	    event = Event(title=title,description=description,category=category,user=user)		
-	    if (request.FILES):
+
+	    if (request.FILES): #If photo is included store in static folder 
 		photo_name=request.user.username+"-"+str(int(time()))+".jpeg"
 		f=request.FILES["photo"]
-		'''
-		with open(settings.MEDIA_ROOT+photo_name, 'wb+') as destination:
-        		for chunk in f.chunks():
-            			destination.write(chunk)
-		'''
 		strg=storage()
 		getattr(strg,settings.STORAGE+"_write")(photo_name,f)
 	    	event.photo=photo_name
+
             event.location=[float(lat),float(lng)] 
             event.save() 	
-            messages.success(request, title + ' has been created')
+            messages.success(request, title + _(' has been created'))
             return HttpResponseRedirect("/")
     else:
 	form = EventForm()
@@ -161,16 +152,15 @@ def addevent(request):
     })  
 
 
+###################################################################################
 @login_required
 def deleteevent(request,event_id):
     if request.method == 'POST':
 	event=Event.objects(id=event_id)[0]
-	if event.photo is not None:
+	if event.photo is not None: # If event has photo it must be deleted
 		strg=storage()
 		getattr(strg,settings.STORAGE+"_remove")(event.photo)
-		'''	
-		os.remove(settings.MEDIA_ROOT+event.photo)
-		'''
+		
 	event.delete()
 	return HttpResponseRedirect("/")
     
@@ -178,6 +168,7 @@ def deleteevent(request,event_id):
         'id': event_id,
     }) 
 
+###################################################################################
 @login_required
 def editevent(request,event_id):
     if request.method == 'POST':
@@ -190,27 +181,22 @@ def editevent(request,event_id):
 	    lat=form.cleaned_data['lat']
 	    lng=form.cleaned_data['lng']
 	    user=request.user.username
+
 	    event = Event(id=event_id,title=title,description=description,category=category,photo=photo,user=user)		
-	    if (request.FILES):
+
+	    if (request.FILES): # If a photo must be added to event
 		strg=storage()
-		if photo is not None:
-			'''
-			os.remove(settings.MEDIA_ROOT+photo)
-			'''
+		if photo is not None: # If event had photo it must be deleted
 			getattr(strg,settings.STORAGE+"_remove")(photo)	
+
 		photo_name=request.user.username+"-"+str(int(time()))+".jpeg"
 		f=request.FILES["photo"]
-		'''
-		with open(settings.MEDIA_ROOT+photo_name, 'wb+') as destination:
-        		for chunk in f.chunks():
-            			destination.write(chunk)
-		'''
-		
 		getattr(strg,settings.STORAGE+"_write")(photo_name,f)
 	    	event.photo=photo_name
+
             event.location=[float(lat),float(lng)] 
             event.save() 	
-            messages.success(request, title + ' has been updated')
+            messages.success(request, title + _(' has been updated'))
             return HttpResponseRedirect("/")
     else:
 	form = EventForm()

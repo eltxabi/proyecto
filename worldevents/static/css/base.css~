@@ -318,6 +318,7 @@ nav ul li a:hover
 
 	border-radius: 0.4em;
 	box-shadow: 0.2em 0.2em 0.5em #888888;
+	height: 600px;
 	
 }
 
@@ -372,6 +373,7 @@ nav ul li a:hover
 	padding: 0.1em;
 	width: 30%;
 	height: 600px;
+	
 }
 
 #toggle_map_detail{
