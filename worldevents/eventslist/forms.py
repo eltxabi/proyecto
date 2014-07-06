@@ -4,7 +4,7 @@ from django.utils.text import capfirst
 from django.forms.widgets import Input
 from mongoengine.django.auth import User
 from eventslist.models import Category
-from django.utils.translation import gettext as _
+from django.utils.translation import ugettext_lazy as _
 
 
 ######################################################################################

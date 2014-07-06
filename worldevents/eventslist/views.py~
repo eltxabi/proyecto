@@ -17,6 +17,7 @@ import pymongo
 from storages import storage
 
 ################################################################################
+
 def home(request,num_events='15'):
    if "event_list" not in request.session: # If there aren't results of a search in session
    	if "search_query" in request.session: # If there is a current search
@@ -32,6 +33,7 @@ def home(request,num_events='15'):
 
 
 ##################################################################################
+
 @login_required
 def addcomment(request):
    if request.method == 'POST':
@@ -52,6 +54,7 @@ def addcomment(request):
 
 
 ####################################################################################
+
 def searchevents(request):
    if request.method == 'POST':
 	form = SearchForm(request.POST)
@@ -76,6 +79,7 @@ def searchevents(request):
    return render(request, "eventslist/searchevents.html", {'form':form,})     
   
 ##############################################################################################
+
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -91,6 +95,7 @@ def register(request):
 
 
 ##############################################################################################3333333
+
 def loginpage(request):
    if request.method == 'POST':
         form = AuthenticationForm(request.POST)
@@ -112,12 +117,14 @@ def loginpage(request):
 
 
 #####################################################################################
+
 @login_required
 def logoutpage(request):
    logout(request)
    return HttpResponseRedirect("/")
 
 ######################################################################################
+
 @login_required
 def addevent(request):
     if request.method == 'POST':
@@ -153,6 +160,7 @@ def addevent(request):
 
 
 ###################################################################################
+
 @login_required
 def deleteevent(request,event_id):
     if request.method == 'POST':
@@ -169,6 +177,7 @@ def deleteevent(request,event_id):
     }) 
 
 ###################################################################################
+
 @login_required
 def editevent(request,event_id):
     if request.method == 'POST':

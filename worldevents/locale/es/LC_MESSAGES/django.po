@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-04 19:46+0000\n"
+"POT-Creation-Date: 2014-07-06 17:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,92 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: eventslist/forms.py:19 eventslist/forms.py:93
+msgid "You must select a location"
+msgstr "Debe seleccionar una posición"
+
+#: eventslist/forms.py:20
+msgid "Distance must be between 1 and 100"
+msgstr "La distancia debe estar entre 1 y 100"
+
+#: eventslist/forms.py:23 eventslist/forms.py:96
+msgid "Title"
+msgstr "Titulo"
+
+#: eventslist/forms.py:24 eventslist/forms.py:98
+msgid "Category"
+msgstr "Categoría"
+
+#: eventslist/forms.py:27
+msgid "Distance"
+msgstr "Distancia"
+
+#: eventslist/forms.py:34
+msgid "Select category"
+msgstr "Seleccione categoría"
+
+#: eventslist/forms.py:55
+msgid "A user with that username already exists."
+msgstr "Ya existe ese nombre de usuario"
+
+#: eventslist/forms.py:56
+msgid "The two password fields didn't match."
+msgstr "Las dos contraseñas no coinciden"
+
+#: eventslist/forms.py:58
+msgid "Username"
+msgstr "Nombre de usuario"
+
+#: eventslist/forms.py:60
+msgid "Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
+msgstr "Obligatorio. 30 caracteres o menos. Solamente letras, digitos y @/./+/-/_"
+
+#: eventslist/forms.py:63
+msgid "This value may contain only letters, numbers and @/./+/-/_ characters."
+msgstr "Este campo solo puede contener letras, númenro y los caracteres @/./+/-/_"
+
+#: eventslist/forms.py:65
+msgid "Password"
+msgstr "Password"
+
+#: eventslist/forms.py:66
+msgid "Password confirmation"
+msgstr "Confirmación de password"
+
+#: eventslist/forms.py:68
+msgid "Enter the same password as above, for verification."
+msgstr "Introduzca la misma contraseña que arriba, para verificación"
+
+#: eventslist/forms.py:97
+msgid "Description"
+msgstr "Descripción"
+
+#: eventslist/views.py:74
+msgid "No search results"
+msgstr "No hay resultados"
+
+#: eventslist/views.py:88
+msgid " you have been successfully registered"
+msgstr " ha sido registrado"
+
+#: eventslist/views.py:107
+#, fuzzy
+msgid "Login Ok "
+msgstr "Login"
+
+#: eventslist/views.py:110
+#, fuzzy
+msgid "Login Fail"
+msgstr "Login"
+
+#: eventslist/views.py:152
+msgid " has been created"
+msgstr " ha sido creada"
+
+#: eventslist/views.py:208
+msgid " has been updated"
+msgstr " ha sido actualizado"
 
 #: eventslist/templates/eventslist/addevent.html:3
 #: eventslist/templates/eventslist/home.html:23
@@ -52,7 +138,7 @@ msgid "Delete Event,¿are you sure?"
 msgstr "Borrar Evento,¿está seguro?"
 
 #: eventslist/templates/eventslist/deleteevent.html:8
-#: eventslist/templates/eventslist/eventslist.html:46
+#: eventslist/templates/eventslist/eventslist.html:47
 msgid "Delete"
 msgstr "Borrar"
 
@@ -68,11 +154,6 @@ msgstr "Editar Evento"
 msgid "Save"
 msgstr "Guardar"
 
-#: eventslist/templates/eventslist/eventslist.html:10
-#, python-format
-msgid "%(category)s"
-msgstr ""
-
 #: eventslist/templates/eventslist/eventslist.html:33
 msgid "Back to list"
 msgstr "Volver a la lista"
@@ -81,7 +162,7 @@ msgstr "Volver a la lista"
 msgid "Map/Detail"
 msgstr "Mapa/Detalle"
 
-#: eventslist/templates/eventslist/eventslist.html:45
+#: eventslist/templates/eventslist/eventslist.html:46
 msgid "Edit"
 msgstr "Editar"
 
@@ -102,6 +183,11 @@ msgstr "Login"
 msgid "Search"
 msgstr "Buscar"
 
+#: eventslist/templates/eventslist/login.html:16
+#, fuzzy
+msgid "login"
+msgstr "Login"
+
 #: eventslist/templates/eventslist/register.html:2
 msgid "Create an account"
 msgstr "Crear cuenta"
@@ -118,10 +204,10 @@ msgstr "Posición"
 msgid "search"
 msgstr "buscar"
 
-#: worldevents/settings.py:88
+#: worldevents/settings.py:76
 msgid "Espanol"
 msgstr ""
 
-#: worldevents/settings.py:89
+#: worldevents/settings.py:77
 msgid "English"
 msgstr ""

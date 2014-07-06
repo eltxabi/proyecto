@@ -15,6 +15,7 @@ from time import time
 import os
 import pymongo
 from storages import storage
+from django.utils.translation import gettext as _
 
 ################################################################################
 

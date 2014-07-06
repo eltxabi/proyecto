@@ -7,9 +7,12 @@ from eventslist.models import Category
 from django.utils.translation import gettext as _
 
 
+######################################################################################
 
 class RangeInput(Input):
     input_type='range'
+
+#######################################################################################
 
 class SearchForm(forms.Form):
     error_messages = {
@@ -45,6 +48,8 @@ class SearchForm(forms.Form):
 
        return cleaned_data 
 
+#############################################################################################33
+
 class RegistrationForm(forms.Form):
     error_messages = {
         'duplicate_username': _("A user with that username already exists."),
@@ -76,10 +81,13 @@ class RegistrationForm(forms.Form):
 
        return cleaned_data	
 
+############################################################################################
 
 class CommentForm(forms.Form):
     content = forms.CharField(label="Comment",widget=forms.Textarea)
     
+###########################################################################################
+
 class EventForm(forms.Form):
     error_messages = {
         'location_not_selected': _("You must select a location"),       
