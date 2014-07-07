@@ -227,7 +227,7 @@ class LoginFormTest(LiveServerTestCase):
 
     def test_form_validation_for_blank_username(self):
 	response = self.client.post('/eventslist/login',data={'username': '','password': '111'})
-        expected_input = escape('Login incorrecto')
+        expected_input = escape('Login Fail')
 	self.assertIn(expected_input,escape(response.content))
 
     def test_form_validation_for_blank_password(self):
@@ -554,7 +554,7 @@ class SearchTest(LiveServerTestCase):
 	user=User.create_user('john','john')
 	user=User.objects(username='john')
 	self.client.login(username='john',password='john')
-	for i in range(60):
+	for i in range(45):
 		response = self.client.post('/eventslist/addevent',data={'title': 'Concierto'+str(i),'description': 'Es un concierto','category': 'Musica','lat':'49.8','lng':'4.7'})
 	response = self.client.post('/eventslist/searchevents',data={'lat':'49.8','lng':'4.7','distance':'4'},follow=True)
 	num_events = response.content.count('</tr>')

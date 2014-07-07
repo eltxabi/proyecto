@@ -222,22 +222,22 @@ class LoginFormTest(LiveServerTestCase):
         
     def test_form_validation_for_blank_items(self):
 	response = self.client.post('/eventslist/login',data={'username': '','password': ''})
-        expected_input = escape('Login incorrecto')
+        expected_input = escape('Login Fail')
 	self.assertIn(expected_input,escape(response.content))
 
     def test_form_validation_for_blank_username(self):
 	response = self.client.post('/eventslist/login',data={'username': '','password': '111'})
-        expected_input = escape('Login incorrecto')
+        expected_input = escape('Login Fail')
 	self.assertIn(expected_input,escape(response.content))
 
     def test_form_validation_for_blank_password(self):
 	response = self.client.post('/eventslist/login',data={'username': '111','password': ''})
-        expected_input = escape('Login incorrecto')
+        expected_input = escape('Login Fail')
 	self.assertIn(expected_input,escape(response.content))
           
     def test_form_validation_for_wrong_data(self):
 	response = self.client.post('/eventslist/login',data={'username': '111','password': '111'})
-        expected_input = escape('Login incorrecto')
+        expected_input = escape('Login Fail')
 	self.assertIn(expected_input,escape(response.content))
     
 

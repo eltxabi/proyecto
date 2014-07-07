@@ -18,15 +18,23 @@ form{
 	color: #848484;
 }
 
+h1 a{
+	text-decoration:none;
+	color: red;
+}
+
 h1{
+	
 	display: inline;
 	padding: 0.3em;
 	font-family: 'Sonsie One', cursive;
 	font-size: 2em;
-	color: red;
+	
 	text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.47);
 	
 }
+
+
 
 h2{
 	display: inline;
@@ -75,6 +83,11 @@ nav ul li a:hover
 	display:none;
 }
 
+#form_container #messages{
+	display:block;
+	float:left;
+}
+
 #messages{
 	display: inline;
 	float: right;
@@ -92,6 +105,8 @@ nav ul li a:hover
 #messages ul li{
 	display: inline;	
 }
+
+
 
 
 .selected_event{
@@ -345,7 +360,7 @@ nav ul li a:hover
 }
 
 
-@media screen and (min-width: 1150px){
+@media screen and (min-width: 1024px){
 #events_list{
 	width: 25%;
 	display:inline;
@@ -386,7 +401,7 @@ nav ul li a:hover
 
 }
 
-@media screen and (min-width: 780px) and (max-width: 1149px){
+@media screen and (min-width: 769px) and (max-width: 1023px){
 
 #events_list{
 	width: 40%;
@@ -431,7 +446,7 @@ nav ul li a:hover
 
 }
 
-@media screen and (max-width: 769px){
+@media screen and (max-width: 768px){
 #events_list{
 	width: 100%;
 	display:inline;

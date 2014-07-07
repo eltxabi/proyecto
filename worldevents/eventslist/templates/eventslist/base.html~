@@ -1,8 +1,9 @@
 {% load staticfiles %}
+{% load i18n %}	
 <!DOCTYPE html>
 <html>
     <head>
-        <title>WorldEvents</title>
+        <title><a href="{% url 'eventslist.views.home' %}">{% trans "WorldEvents" %}</a></title>
 	<meta charset="uft-8">
         {% block stylesheets %}
 	{% endblock %}
@@ -11,7 +12,7 @@
     </head>
     <body>
 	<header>
-		<h1>WorldEvents</h1>
+		<h1>{% trans "WorldEvents" %}</h1>
 		<nav>
 			{% block nav %}
 	 		{% endblock %}		

@@ -15,6 +15,7 @@ from time import time
 import os
 import pymongo
 from storages import storage
+from django.utils.translation import gettext as _
 
 ################################################################################
 
@@ -107,7 +108,7 @@ def loginpage(request):
 	   messages.success(request,_('Login Ok ') + user.username)
 	   return HttpResponseRedirect("/")
         else:
-           messages.success(request,_('Login Fail'))    
+           messages.error(request,_('Login Fail'))    
    else:
         form = AuthenticationForm()
  
