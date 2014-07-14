@@ -273,7 +273,8 @@ function manage_resize(){
 		detail.css("height","")
 		events_list.css("width","")
 		events_list.css("height","")
-		
+		$("#back_to_list").css("display","")
+		$("#toggle_map_detail").css("display","")
 	});
 }
 
